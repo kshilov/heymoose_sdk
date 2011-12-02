@@ -20,7 +20,10 @@ package com.heymoose.offer
 
 	import flash.display.MovieClip;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
+	import flash.net.URLRequest;
+	import flash.net.navigateToURL;
 	import flash.utils.Timer;
 
 	import mx.rpc.AsyncToken;
@@ -50,6 +53,8 @@ package com.heymoose.offer
 
 			graphics.lineStyle(1, 0, 0.5);
 			graphics.drawRect(0,0,bannerWidth,bannerHeight);
+
+			addEventListener(MouseEvent.CLICK, onMouseClick);
 		}
 		public function initWithServices( count:int = 1, timer:int = 5000 ):void
 		{
@@ -72,6 +77,8 @@ package com.heymoose.offer
 		{
 			var resultObject:Object = JSON.decode(result.result.toString());
 			offers = resultObject.result;
+
+			if(!offers || offers.length == 0) return;
 
 			if(rotateTimer && rotateTimer.hasEventListener(TimerEvent.TIMER))
 				rotateTimer.removeEventListener(TimerEvent.TIMER, rotateOffer);
@@ -100,6 +107,14 @@ package com.heymoose.offer
 			image.x = image.y = 1;
 			image.width = bannerWidth-1;
 			image.height = bannerHeight-1;
+		}
+		private function onMouseClick(event:MouseEvent):void
+		{
+			navigateToURL(new URLRequest(services.doOffer(offers[currentOfferIndex].id)));
+		}
+		private function doOfferResult(event:ResultEvent):void
+		{
+			trace(event);
 		}
 	}
 }

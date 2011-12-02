@@ -84,12 +84,12 @@ package com.heymoose
 		}
 
 
-		public function doOffer( offerId:String ):AsyncToken
+		public function doOffer( offerId:String ):String
 		{
 			var params:Object = new Object();
 			params['method'] = 'doOffer';
 			params['offer_id'] = offerId;
-			return send( params );
+			return getString( params );
 		}
 
 
@@ -108,6 +108,25 @@ package com.heymoose
 			services.url = "http://heymoose.com/rest_api/api"
 
 			return services.send( params );
+		}
+		private function getString( params:Object ):String
+		{
+			params['format'] = 'JSON';
+			params['platform'] = platform;
+			params['app_id'] = appId;
+			params['uid'] = uid;
+			params['nocache'] = Math.random();
+			params['sig'] = generateSig( params );
+
+			services.url = "http://heymoose.com/rest_api/api"
+
+			var stringParams:Array = new Array();
+			for (var param:String in params)
+			{
+				stringParams.push(param +"="+ params[param]);
+			}
+
+			return services.url+"?"+stringParams.join("&");
 		}
 
 
