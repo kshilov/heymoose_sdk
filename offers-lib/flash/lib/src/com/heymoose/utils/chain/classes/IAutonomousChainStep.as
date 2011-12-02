@@ -17,9 +17,6 @@
 package com.heymoose.utils.chain.classes
 {
 
-	import com.heymoose.utils.chain.*;
-
-
 	public interface IAutonomousChainStep extends IChainStep
 	{
 		/**

@@ -7,7 +7,7 @@
 package com.heymoose
 {
 
-	import com.heymoose.utils.crypto.MD5;
+	import by.blooddy.crypto.MD5;
 
 	import mx.rpc.AsyncToken;
 	import mx.rpc.http.HTTPService;
@@ -40,7 +40,7 @@ package com.heymoose
 		}
 
 
-		public function init( appId:int, secret:String, uid:String, platform:String, rewardCallback:Function ):void
+		public function init( appId:int, secret:String, uid:String, platform:String, rewardCallback:Function = null ):void
 		{
 			this.appId = appId;
 			this.secret = secret;
@@ -54,12 +54,23 @@ package com.heymoose
 		}
 
 
-		public function introducePerformer( sex:String, year:int ):AsyncToken
+		private var sex:String;
+		private var year:String;
+
+
+		public function setPerformer( sex:String, year:String ):void
+		{
+			this.sex = sex;
+			this.year = year;
+		}
+
+
+		public function introducePerformer( sex:String = "", year:String = "" ):AsyncToken
 		{
 			var params:Object = new Object();
 			params['method'] = 'introducePerformer';
-			params['sex'] = sex;
-			params['year'] = year;
+			sex == "" ? params['sex'] = this.sex : params['sex'] = sex;
+			year == "" ? params['year'] = this.year : params['year'] = sex;
 			return send( params );
 		}
 
@@ -69,6 +80,15 @@ package com.heymoose
 			var params:Object = new Object();
 			params['method'] = 'getOffers';
 			params['filter'] = filter;
+			return send( params );
+		}
+
+
+		public function doOffer( offerId:String ):AsyncToken
+		{
+			var params:Object = new Object();
+			params['method'] = 'doOffer';
+			params['offer_id'] = offerId;
 			return send( params );
 		}
 
@@ -96,7 +116,7 @@ package com.heymoose
 		//////////////////////////////////////////
 		private function generateSig( params:Object ):String
 		{
-			return MD5.encrypt( sortedParams( params ) + this.secret );
+			return MD5.hash( sortedParams( params ) + this.secret );
 		}
 
 

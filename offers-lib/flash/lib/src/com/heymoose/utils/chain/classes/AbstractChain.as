@@ -17,11 +17,6 @@
 package com.heymoose.utils.chain.classes
 {
 
-	import com.heymoose.utils.chain.*;
-
-	import com.heymoose.utils.chain.classes.IChain;
-	import com.heymoose.utils.chain.classes.IChainStep;
-
 	import flash.events.EventDispatcher;
 
 	[Event( name="chainStart",			type="com.heymoose.utils.chain.classes.ChainEvent" )]

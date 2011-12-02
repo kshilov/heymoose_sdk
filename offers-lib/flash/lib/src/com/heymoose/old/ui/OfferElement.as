@@ -1,8 +1,9 @@
 package com.heymoose.old.ui
 {
 
+	import by.blooddy.crypto.Base64;
+
 	import com.heymoose.old.events.OfferEvent;
-	import com.heymoose.old.ext.Base64;
 
 	import flash.display.DisplayObject;
 	import flash.display.GradientType;
@@ -163,15 +164,15 @@ package com.heymoose.old.ui
 					BUTTON_WIDTH, BUTTON_HEIGHT, BUTTON_CORNER_SIZE, ButtonState.GREEN, BUTTON_FONT_SIZE );
 			addChild( goButton );
 
-			var offersWindow:OffersWindow = window as OffersWindow;
-			if ( offersWindow != null )
-			{
-				url = offersWindow.getOffersService().do_offer_for( offer.id );
-			} else
-			{
-				var offersBanner:OfferBanner = window as OfferBanner;
-				url = offersBanner.getOffersService().do_offer_for( offer.id );
-			}
+			/*var offersWindow:OffersWindow = window as OffersWindow;
+			 if ( offersWindow != null )
+			 {
+			 url = offersWindow.getOffersService().do_offer_for( offer.id );
+			 } else
+			 {
+			 var offersBanner:OfferBanner = window as OfferBanner;
+			 url = offersBanner.getOffersService().do_offer_for( offer.id );
+			 }*/
 			goButton.addEventListener( MouseEvent.CLICK, goButton_clickHandler );
 			//Placeholders for flag icons
 			//frame.graphics.beginFill(0xcccccc,1);

@@ -17,9 +17,6 @@
 package com.heymoose.utils.chain.classes
 {
 
-	import com.heymoose.utils.chain.classes.IChain;
-	import com.heymoose.utils.chain.classes.IChainStep;
-
 	public class BaseChainStep implements IChainStep
 	{
 		/**

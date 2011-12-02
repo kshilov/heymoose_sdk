@@ -17,11 +17,6 @@
 package com.heymoose.utils.chain.classes
 {
 
-	import com.heymoose.utils.chain.*;
-
-	import com.heymoose.utils.chain.classes.IAutonomousChainStep;
-	import com.heymoose.utils.chain.classes.IChain;
-
 	public class BaseCompositeChain extends AbstractChain implements IChain
 	{
 		// ========================================

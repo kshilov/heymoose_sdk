@@ -17,15 +17,13 @@
 package com.heymoose.utils.chain.classes
 {
 
-	import com.heymoose.utils.chain.*;
-
 	import flash.events.IEventDispatcher;
 
-	[Event(name="chainStart", type="org.swizframework.events.ChainEvent")]
-	[Event(name="chainStepComplete", type="org.swizframework.events.ChainEvent")]
-	[Event(name="chainStepError", type="org.swizframework.events.ChainEvent")]
-	[Event(name="chainComplete", type="org.swizframework.events.ChainEvent")]
-	[Event(name="chainFail", type="org.swizframework.events.ChainEvent")]
+	[Event(name="chainStart", type="com.heymoose.utils.chain.classes.ChainEvent")]
+	[Event(name="chainStepComplete", type="com.heymoose.utils.chain.classes.ChainEvent")]
+	[Event(name="chainStepError", type="com.heymoose.utils.chain.classes.ChainEvent")]
+	[Event(name="chainComplete", type="com.heymoose.utils.chain.classes.ChainEvent")]
+	[Event(name="chainFail", type="com.heymoose.utils.chain.classes.ChainEvent")]
 
 	public interface IChain extends IEventDispatcher
 	{

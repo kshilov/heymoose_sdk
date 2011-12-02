@@ -11,7 +11,7 @@ package com.heymoose.statics
 	{
 		public static function convert( value:String, platform:String ):String
 		{
-			if(!value) return "NULL"
+			if ( !value ) return "NULL"
 			switch ( platform )
 			{
 				case HeyMoosePlatform.vkontakte:

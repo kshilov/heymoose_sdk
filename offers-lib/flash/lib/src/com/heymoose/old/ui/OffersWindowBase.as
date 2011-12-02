@@ -56,6 +56,7 @@ package com.heymoose.old.ui
 		{
 			this.offersService = offersService;
 			this.rewardCallback = rewardCallback;
+			createWindow();
 		}
 
 

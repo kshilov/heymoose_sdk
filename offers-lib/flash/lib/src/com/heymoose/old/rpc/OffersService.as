@@ -1,10 +1,11 @@
 package com.heymoose.old.rpc
 {
 
-	import com.adobe.json.serialization.JSON;
+	import by.blooddy.crypto.MD5;
+	import by.blooddy.crypto.serialization.JSON;
+
 	import com.heymoose.old.events.RPCErrorEvent;
 	import com.heymoose.old.events.RPCEvent;
-	import com.heymoose.utils.crypto.MD5;
 
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -234,7 +235,7 @@ package com.heymoose.old.rpc
 
 		public function generateSig( params:Object ):String
 		{
-			return MD5.encrypt( sortedParams( params ) + this.secret_key );
+			return MD5.hash( sortedParams( params ) + this.secret_key );
 		}
 
 
