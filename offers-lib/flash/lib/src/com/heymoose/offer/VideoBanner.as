@@ -42,19 +42,17 @@ package com.heymoose.offer
 		public function VideoBanner( size:String = "0 x 0", backgroundColor:uint = 0xFFFFFF, backgroundAlpha:Number = 0.8, services:HeyMoose = null )
 		{
 			this.services = services;
-			bannerWidth = int( size.split( " x " )[0] );
-			bannerHeight = int( size.split( " x " )[1] );
+			bannerWidth = int( size.split( " x " )[0] )-1;
+			bannerHeight = int( size.split( " x " )[1] )-1;
 
 			graphics.beginFill( backgroundColor, backgroundAlpha );
 			graphics.lineStyle( 1, 0, 0.5 );
-			graphics.drawRect( 0, 0, bannerWidth, bannerHeight );
+			graphics.drawRect( 0, 0, bannerWidth+1, bannerHeight+1 );
 			graphics.endFill();
 
 			addEventListener( MouseEvent.CLICK, onMouseClick );
 
 			video = new Video();
-			video.width = bannerWidth;
-			video.height = bannerHeight;
 			addChild( video );
 
 			videoConnection = new NetConnection();
@@ -123,6 +121,7 @@ package com.heymoose.offer
 		private function playOffer():void
 		{
 			videoStream.play( offers[currentOfferIndex].videoUrl );
+			video.smoothing = true;
 		}
 
 
@@ -142,20 +141,25 @@ package com.heymoose.offer
 
 		private function metaDataHandler( infoObject:Object ):void
 		{
-			video.width = infoObject.width;
-			video.height = infoObject.height;
-			var verticalAspect:Number = (bannerHeight - 1) / infoObject.height;
-			var horizontalAspect:Number = (bannerWidth - 1) / infoObject.width;
+			//video.width = infoObject.width;
+			//video.height = infoObject.height;
+			var aspectRatio:Number = infoObject.width/infoObject.height;
+			var verticalAspect:Number = bannerHeight / infoObject.height;
+			var horizontalAspect:Number = bannerWidth / infoObject.width;
 			if ( verticalAspect > horizontalAspect )
 			{
-				video.scaleX = video.scaleY = horizontalAspect;
+				video.width = bannerWidth;
+				video.height = bannerWidth/aspectRatio;
+				video.x = 1;
+				video.y = ((bannerHeight) - video.height) / 2;
 			}
 			else
 			{
-				video.scaleX = video.scaleY = verticalAspect;
+				video.height = bannerHeight;
+				video.width = bannerHeight*aspectRatio;
+				video.y = 1;
+				video.x = ((bannerWidth) - video.width) / 2;
 			}
-			video.x = Math.floor( ((bannerWidth - 1) - video.width) / 2 ) + 1;
-			video.y = Math.floor( ((bannerHeight - 1) - video.height) / 2 ) + 1;
 		}
 
 
