@@ -109,6 +109,8 @@ package com.heymoose
 
 			return services.send( params );
 		}
+
+
 		private function getString( params:Object ):String
 		{
 			params['format'] = 'JSON';
@@ -121,12 +123,12 @@ package com.heymoose
 			services.url = "http://heymoose.com/rest_api/api"
 
 			var stringParams:Array = new Array();
-			for (var param:String in params)
+			for ( var param:String in params )
 			{
-				stringParams.push(param +"="+ params[param]);
+				stringParams.push( param + "=" + params[param] );
 			}
 
-			return services.url+"?"+stringParams.join("&");
+			return services.url + "?" + stringParams.join( "&" );
 		}
 
 

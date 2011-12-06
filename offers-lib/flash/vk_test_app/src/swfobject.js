@@ -5,48 +5,15 @@
 var swfobject = function()
 {
 
-	var UNDEF = "undefined",
-			OBJECT = "object",
-			SHOCKWAVE_FLASH = "Shockwave Flash",
-			SHOCKWAVE_FLASH_AX = "ShockwaveFlash.ShockwaveFlash",
-			FLASH_MIME_TYPE = "application/x-shockwave-flash",
-			EXPRESS_INSTALL_ID = "SWFObjectExprInst",
-			ON_READY_STATE_CHANGE = "onreadystatechange",
-
-			win = window,
-			doc = document,
-			nav = navigator,
-
-			plugin = false,
-			domLoadFnArr = [main],
-			regObjArr = [],
-			objIdArr = [],
-			listenersArr = [],
-			storedAltContent,
-			storedAltContentId,
-			storedCallbackFn,
-			storedCallbackObj,
-			isDomLoaded = false,
-			isExpressInstallActive = false,
-			dynamicStylesheet,
-			dynamicStylesheetMedia,
-			autoHideShow = true,
-
-		/* Centralized function for browser feature detection
-		 - User agent string detection is only used when no good alternative is possible
-		 - Is executed directly for optimal performance
-		 */
+	var UNDEF = "undefined", OBJECT = "object", SHOCKWAVE_FLASH = "Shockwave Flash", SHOCKWAVE_FLASH_AX = "ShockwaveFlash.ShockwaveFlash", FLASH_MIME_TYPE = "application/x-shockwave-flash", EXPRESS_INSTALL_ID = "SWFObjectExprInst", ON_READY_STATE_CHANGE = "onreadystatechange", win = window, doc = document, nav = navigator, plugin = false, domLoadFnArr = [main], regObjArr = [], objIdArr = [], listenersArr = [], storedAltContent, storedAltContentId, storedCallbackFn, storedCallbackObj, isDomLoaded = false, isExpressInstallActive = false, dynamicStylesheet, dynamicStylesheetMedia, autoHideShow = true, /* Centralized function for browser feature detection
+	 - User agent string detection is only used when no good alternative is possible
+	 - Is executed directly for optimal performance
+	 */
 			ua = function()
 			{
-				var w3cdom = typeof doc.getElementById != UNDEF && typeof doc.getElementsByTagName != UNDEF && typeof doc.createElement != UNDEF,
-						u = nav.userAgent.toLowerCase(),
-						p = nav.platform.toLowerCase(),
-						windows = p ? /win/.test(p) : /win/.test(u),
-						mac = p ? /mac/.test(p) : /mac/.test(u),
-						webkit = /webkit/.test(u) ? parseFloat(u.replace(/^.*webkit\/(\d+(\.\d+)?).*$/, "$1")) : false, // returns either the webkit version or false if not webkit
+				var w3cdom = typeof doc.getElementById != UNDEF && typeof doc.getElementsByTagName != UNDEF && typeof doc.createElement != UNDEF, u = nav.userAgent.toLowerCase(), p = nav.platform.toLowerCase(), windows = p ? /win/.test(p) : /win/.test(u), mac = p ? /mac/.test(p) : /mac/.test(u), webkit = /webkit/.test(u) ? parseFloat(u.replace(/^.*webkit\/(\d+(\.\d+)?).*$/, "$1")) : false, // returns either the webkit version or false if not webkit
 						ie = !+"\v1", // feature detection based on Andrea Giammarchi's solution: http://webreflection.blogspot.com/2009/01/32-bytes-to-know-if-your-browser-is-ie.html
-						playerVersion = [0,0,0],
-						d = null;
+						playerVersion = [0,0,0], d = null;
 				if (typeof nav.plugins != UNDEF && typeof nav.plugins[SHOCKWAVE_FLASH] == OBJECT)
 				{
 					d = nav.plugins[SHOCKWAVE_FLASH].description;
@@ -81,13 +48,11 @@ var swfobject = function()
 					}
 				}
 				return { w3:w3cdom, pv:playerVersion, wk:webkit, ie:ie, win:windows, mac:mac };
-			}(),
-
-		/* Cross-browser onDomLoad
-		 - Will fire an event as soon as the DOM of a web page is loaded
-		 - Internet Explorer workaround based on Diego Perini's solution: http://javascript.nwbox.com/IEContentLoaded/
-		 - Regular onload serves as fallback
-		 */
+			}(), /* Cross-browser onDomLoad
+	 - Will fire an event as soon as the DOM of a web page is loaded
+	 - Internet Explorer workaround based on Diego Perini's solution: http://javascript.nwbox.com/IEContentLoaded/
+	 - Regular onload serves as fallback
+	 */
 			onDomLoad = function()
 			{
 				if (!ua.w3)
@@ -428,8 +393,7 @@ var swfobject = function()
 				att.height = "137";
 			}
 			doc.title = doc.title.slice(0, 47) + " - Flash Player Installation";
-			var pt = ua.ie && ua.win ? "ActiveX" : "PlugIn",
-					fv = "MMredirectURL=" + encodeURI(window.location).toString().replace(/&/g, "%26") + "&MMplayerType=" + pt + "&MMdoctitle=" + doc.title;
+			var pt = ua.ie && ua.win ? "ActiveX" : "PlugIn", fv = "MMredirectURL=" + encodeURI(window.location).toString().replace(/&/g, "%26") + "&MMplayerType=" + pt + "&MMdoctitle=" + doc.title;
 			if (typeof par.flashvars != UNDEF)
 			{
 				par.flashvars += "&" + fv;

@@ -5,7 +5,8 @@
 	<fx:Script>
 		<![CDATA[
         import com.heymoose.HeyMoose;
-		import com.heymoose.offer.Banner;
+		import com.heymoose.offer.ImageBanner;
+		import com.heymoose.offer.VideoBanner;
 		import com.heymoose.statics.BannerSize;
 		import com.heymoose.statics.HeyMooseBirthDate;
 		import com.heymoose.statics.HeyMoosePlatform;
@@ -57,13 +58,24 @@
 			sex = HeyMooseSex.convert( data[0]['sex'], HeyMoosePlatform.vkontakte );
 			year = HeyMooseBirthDate.convert( data[0]['bdate'], HeyMoosePlatform.vkontakte );
 
-			var lib:HeyMoose = HeyMoose.instance;
-			lib.init( 16, "67c629b3-ebe7-411d-a793-238a43c29463", "1507618", HeyMoosePlatform.vkontakte, rewardCallback );
-			lib.setPerformer( sex, year );
+			// INIT HeyMoose lib
+			HeyMoose.instance.init( 16, "67c629b3-ebe7-411d-a793-238a43c29463", "1507618", HeyMoosePlatform.vkontakte, rewardCallback );
+			// set performer
+			HeyMoose.instance.setPerformer( sex, year );
 
-			var banner:Banner = new Banner( BannerSize.SIZE_3 );
-			banner.initWithServices( 5 );
-			element.addChild( banner );
+			// create new banner
+			var vbanner:VideoBanner = new VideoBanner( BannerSize.SIZE_1 );
+			// get 5 images for banner
+			vbanner.initWithServices( 5 );
+			// add child with banner
+			element.addChild( vbanner );
+
+			// create new banner
+			var ibanner:ImageBanner = new ImageBanner( BannerSize.SIZE_1 );
+			// get 5 images for banner
+			ibanner.initWithServices( 5 );
+			// add child with banner
+			element1.addChild( ibanner );
 		}
 
 
@@ -76,7 +88,8 @@
 	<s:VGroup paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10">
 		<s:Label text="Sex: {sex}"/>
 		<s:Label text="Year: {year}"/>
-		<mx:UIComponent id="element" width="100%" height="100%"/>
+		<mx:UIComponent id="element" height="60"/>
+		<mx:UIComponent id="element1" height="60"/>
 	</s:VGroup>
 
 </s:Application>
