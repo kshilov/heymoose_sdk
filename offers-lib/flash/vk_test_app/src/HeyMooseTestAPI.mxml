@@ -64,14 +64,14 @@
 			HeyMoose.instance.setPerformer( sex, year );
 
 			// create new banner
-			var vbanner:VideoBanner = new VideoBanner( BannerSize.SIZE_1 );
+			var vbanner:VideoBanner = new VideoBanner( BannerSize.SIZE_234x60 );
 			// get 5 images for banner
 			vbanner.initWithServices( 5 );
 			// add child with banner
 			element.addChild( vbanner );
 
 			// create new banner
-			var ibanner:ImageBanner = new ImageBanner( BannerSize.SIZE_1 );
+			var ibanner:ImageBanner = new ImageBanner( BannerSize.SIZE_234x60 );
 			// get 5 images for banner
 			ibanner.initWithServices( 5 );
 			// add child with banner
