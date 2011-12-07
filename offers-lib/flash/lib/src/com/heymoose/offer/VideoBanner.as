@@ -53,6 +53,7 @@ package com.heymoose.offer
 			addEventListener( MouseEvent.CLICK, onMouseClick );
 
 			video = new Video();
+			video.visible = false;
 			addChild( video );
 
 			videoConnection = new NetConnection();
@@ -120,6 +121,7 @@ package com.heymoose.offer
 
 		private function playOffer():void
 		{
+			video.visible = false;
 			videoStream.play( offers[currentOfferIndex].videoUrl );
 			video.smoothing = true;
 		}
@@ -160,6 +162,8 @@ package com.heymoose.offer
 				video.y = 1;
 				video.x = ((bannerWidth) - video.width) / 2;
 			}
+
+			video.visible = true;
 		}
 
 
