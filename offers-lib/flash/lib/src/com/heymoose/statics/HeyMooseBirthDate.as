@@ -7,25 +7,25 @@
 package com.heymoose.statics
 {
 
-	public class HeyMooseBirthDate
+public class HeyMooseBirthDate
+{
+	public static function convert ( value:String, platform:String ):String
 	{
-		public static function convert( value:String, platform:String ):String
+		if ( !value ) return "NULL"
+		switch ( platform )
 		{
-			if ( !value ) return "NULL"
-			switch ( platform )
-			{
-				case HeyMoosePlatform.vkontakte:
-					if ( value.split( '.' ).length == 3 )
-					{
-						return value.split( '.' )[2];
-					}
-					else
-					{
-						return "NULL"
-					}
-					break;
-			}
-			return "NULL"
+			case HeyMoosePlatform.vkontakte:
+				if ( value.split ( '.' ).length == 3 )
+				{
+					return value.split ( '.' )[2];
+				}
+				else
+				{
+					return "NULL"
+				}
+				break;
 		}
+		return "NULL"
 	}
+}
 }

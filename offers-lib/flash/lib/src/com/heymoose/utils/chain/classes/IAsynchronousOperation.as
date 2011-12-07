@@ -17,25 +17,25 @@
 package com.heymoose.utils.chain.classes
 {
 
-	import mx.rpc.IResponder;
+import mx.rpc.IResponder;
 
-	public interface IAsynchronousOperation
-	{
-		/**
-		 * Add a responder to be notified of operation completion or failure.
-		 */
-		function addResponder( responder:IResponder ):void;
-
-
-		/**
-		 * Notify registered responders that this operation is complete.
-		 */
-		function complete( data:Object ):void;
+public interface IAsynchronousOperation
+{
+	/**
+	 * Add a responder to be notified of operation completion or failure.
+	 */
+	function addResponder ( responder:IResponder ):void;
 
 
-		/**
-		 * Notify registered responders that this operation has failed.
-		 */
-		function fail( info:Object ):void;
-	}
+	/**
+	 * Notify registered responders that this operation is complete.
+	 */
+	function complete ( data:Object ):void;
+
+
+	/**
+	 * Notify registered responders that this operation has failed.
+	 */
+	function fail ( info:Object ):void;
+}
 }

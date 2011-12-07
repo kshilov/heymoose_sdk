@@ -17,9 +17,9 @@
 package com.heymoose.utils.chain.classes
 {
 
-	public final class ChainType
-	{
-		public static const SEQUENCE:String = "sequence";
-		public static const PARALLEL:String = "parallel";
-	}
+public final class ChainType
+{
+	public static const SEQUENCE:String = "sequence";
+	public static const PARALLEL:String = "parallel";
+}
 }

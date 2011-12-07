@@ -17,46 +17,46 @@
 package com.heymoose.utils.chain.classes
 {
 
-	import flash.events.IEventDispatcher;
+import flash.events.IEventDispatcher;
 
-	[Event(name="chainStart", type="com.heymoose.utils.chain.classes.ChainEvent")]
-	[Event(name="chainStepComplete", type="com.heymoose.utils.chain.classes.ChainEvent")]
-	[Event(name="chainStepError", type="com.heymoose.utils.chain.classes.ChainEvent")]
-	[Event(name="chainComplete", type="com.heymoose.utils.chain.classes.ChainEvent")]
-	[Event(name="chainFail", type="com.heymoose.utils.chain.classes.ChainEvent")]
+[Event(name="chainStart", type="com.heymoose.utils.chain.classes.ChainEvent")]
+[Event(name="chainStepComplete", type="com.heymoose.utils.chain.classes.ChainEvent")]
+[Event(name="chainStepError", type="com.heymoose.utils.chain.classes.ChainEvent")]
+[Event(name="chainComplete", type="com.heymoose.utils.chain.classes.ChainEvent")]
+[Event(name="chainFail", type="com.heymoose.utils.chain.classes.ChainEvent")]
 
-	public interface IChain extends IEventDispatcher
-	{
-		function get position():int;
-
-
-		function set position( value:int ):void;
+public interface IChain extends IEventDispatcher
+{
+	function get position ():int;
 
 
-		function get isComplete():Boolean;
+	function set position ( value:int ):void;
 
 
-		function get stopOnError():Boolean;
+	function get isComplete ():Boolean;
 
 
-		function set stopOnError( value:Boolean ):void;
+	function get stopOnError ():Boolean;
 
 
-		function hasNext():Boolean;
+	function set stopOnError ( value:Boolean ):void;
 
 
-		function stepComplete():void;
+	function hasNext ():Boolean;
 
 
-		function stepError():void;
+	function stepComplete ():void;
 
 
-		function addStep( step:IChainStep ):IChain;
+	function stepError ():void;
 
 
-		function start():void;
+	function addStep ( step:IChainStep ):IChain;
 
 
-		function doProceed():void;
-	}
+	function start ():void;
+
+
+	function doProceed ():void;
+}
 }

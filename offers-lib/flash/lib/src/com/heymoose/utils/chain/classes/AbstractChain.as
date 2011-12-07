@@ -17,247 +17,247 @@
 package com.heymoose.utils.chain.classes
 {
 
-	import flash.events.EventDispatcher;
+import flash.events.EventDispatcher;
 
-	[Event( name="chainStart",			type="com.heymoose.utils.chain.classes.ChainEvent" )]
-	[Event( name="chainStepComplete",	type="com.heymoose.utils.chain.classes.ChainEvent" )]
-	[Event( name="chainStepError",		type="com.heymoose.utils.chain.classes.ChainEvent" )]
-	[Event( name="chainComplete",		type="com.heymoose.utils.chain.classes.ChainEvent" )]
-	[Event( name="chainFail",			type="com.heymoose.utils.chain.classes.ChainEvent" )]
+[Event(name="chainStart", type="com.heymoose.utils.chain.classes.ChainEvent")]
+[Event(name="chainStepComplete", type="com.heymoose.utils.chain.classes.ChainEvent")]
+[Event(name="chainStepError", type="com.heymoose.utils.chain.classes.ChainEvent")]
+[Event(name="chainComplete", type="com.heymoose.utils.chain.classes.ChainEvent")]
+[Event(name="chainFail", type="com.heymoose.utils.chain.classes.ChainEvent")]
 
-	public class AbstractChain extends EventDispatcher implements IChainStep
+public class AbstractChain extends EventDispatcher implements IChainStep
+{
+	public var mode:String = ChainType.SEQUENCE;
+
+	public var steps:Array = [];
+
+
+	public function get currentStep ():IChainStep
 	{
-		public var mode:String = ChainType.SEQUENCE;
+		return IChainStep ( steps[ position ] );
+	}
 
-		public var steps:Array = [];
+
+	/**
+	 * Backing variable for <code>chain</code> getter/setter.
+	 */
+	protected var _chain:IChain;
+
+	/**
+	 *
+	 */
+	public function get chain ():IChain
+	{
+		return _chain;
+	}
 
 
-		public function get currentStep():IChainStep
+	public function set chain ( value:IChain ):void
+	{
+		_chain = value;
+	}
+
+
+	protected var _isComplete:Boolean = true;
+	protected var _isError:Boolean = false;
+
+
+	public function get isComplete ():Boolean
+	{
+		return _isComplete;
+	}
+
+
+	public function get isError ():Boolean
+	{
+		return _isError;
+	}
+
+
+	/**
+	 * Backing variable for <code>position</code> getter/setter.
+	 */
+	protected var _position:int = -1;
+
+	/**
+	 *
+	 */
+	public function get position ():int
+	{
+		return _position;
+	}
+
+
+	public function set position ( value:int ):void
+	{
+		_position = value;
+	}
+
+
+	/**
+	 * Backing variable for <code>stopOnError</code> getter/setter.
+	 */
+	protected var _stopOnError:Boolean;
+
+	/**
+	 *
+	 */
+	public function get stopOnError ():Boolean
+	{
+		return _stopOnError;
+	}
+
+
+	public function set stopOnError ( value:Boolean ):void
+	{
+		_stopOnError = value;
+	}
+
+
+	public function AbstractChain ( mode:String = ChainType.SEQUENCE, stopOnError:Boolean = true )
+	{
+		this.mode = mode;
+		this.stopOnError = stopOnError;
+	}
+
+
+	/**
+	 *
+	 */
+	public function addStep ( step:IChainStep ):IChain
+	{
+		step.chain = IChain ( this );
+		steps.push ( step );
+		return IChain ( this );
+	}
+
+
+	/**
+	 *
+	 */
+	public function hasNext ():Boolean
+	{
+		return position + 1 < steps.length;
+	}
+
+
+	/**
+	 *
+	 */
+	public function start ():void
+	{
+		if ( _isComplete )
 		{
-			return IChainStep( steps[ position ] );
+			_isComplete = false;
+			_isError = false;
+			position = -1;
+			proceed ();
 		}
+	}
 
 
-		/**
-		 * Backing variable for <code>chain</code> getter/setter.
-		 */
-		protected var _chain:IChain;
-
-		/**
-		 *
-		 */
-		public function get chain():IChain
+	public function stepComplete ():void
+	{
+		dispatchEvent ( new ChainEvent ( ChainEvent.CHAIN_STEP_COMPLETE ) );
+		if ( mode == ChainType.SEQUENCE )
 		{
-			return _chain;
+			proceed ();
 		}
-
-
-		public function set chain( value:IChain ):void
+		else
 		{
-			_chain = value;
-		}
-
-
-		protected var _isComplete:Boolean = true;
-		protected var _isError:Boolean = false;
-
-
-		public function get isComplete():Boolean
-		{
-			return _isComplete;
-		}
-
-
-		public function get isError():Boolean
-		{
-			return _isError;
-		}
-
-
-		/**
-		 * Backing variable for <code>position</code> getter/setter.
-		 */
-		protected var _position:int = -1;
-
-		/**
-		 *
-		 */
-		public function get position():int
-		{
-			return _position;
-		}
-
-
-		public function set position( value:int ):void
-		{
-			_position = value;
-		}
-
-
-		/**
-		 * Backing variable for <code>stopOnError</code> getter/setter.
-		 */
-		protected var _stopOnError:Boolean;
-
-		/**
-		 *
-		 */
-		public function get stopOnError():Boolean
-		{
-			return _stopOnError;
-		}
-
-
-		public function set stopOnError( value:Boolean ):void
-		{
-			_stopOnError = value;
-		}
-
-
-		public function AbstractChain( mode:String = ChainType.SEQUENCE, stopOnError:Boolean = true )
-		{
-			this.mode = mode;
-			this.stopOnError = stopOnError;
-		}
-
-
-		/**
-		 *
-		 */
-		public function addStep( step:IChainStep ):IChain
-		{
-			step.chain = IChain( this );
-			steps.push( step );
-			return IChain( this );
-		}
-
-
-		/**
-		 *
-		 */
-		public function hasNext():Boolean
-		{
-			return position + 1 < steps.length;
-		}
-
-
-		/**
-		 *
-		 */
-		public function start():void
-		{
-			if ( _isComplete )
+			for ( var i:int = 0; i < steps.length; i++ )
 			{
-				_isComplete = false;
-				_isError = false;
-				position = -1;
-				proceed();
+				if ( !IChainStep ( steps[ i ] ).isComplete )
+					return;
 			}
+			complete ();
 		}
+	}
 
 
-		public function stepComplete():void
+	/**
+	 *
+	 */
+	public function proceed ():void
+	{
+		if ( position == -1 )
+			dispatchEvent ( new ChainEvent ( ChainEvent.CHAIN_START ) );
+
+		if ( !_isError )
 		{
-			dispatchEvent( new ChainEvent( ChainEvent.CHAIN_STEP_COMPLETE ) );
 			if ( mode == ChainType.SEQUENCE )
 			{
-				proceed();
+				if ( hasNext () )
+				{
+					position++;
+					IChain ( this ).doProceed ();
+				}
+				else
+				{
+					complete ();
+				}
 			}
 			else
 			{
 				for ( var i:int = 0; i < steps.length; i++ )
 				{
-					if ( !IChainStep( steps[ i ] ).isComplete )
-						return;
-				}
-				complete();
-			}
-		}
-
-
-		/**
-		 *
-		 */
-		public function proceed():void
-		{
-			if ( position == -1 )
-				dispatchEvent( new ChainEvent( ChainEvent.CHAIN_START ) );
-
-			if ( !_isError )
-			{
-				if ( mode == ChainType.SEQUENCE )
-				{
-					if ( hasNext() )
-					{
-						position++;
-						IChain( this ).doProceed();
-					}
-					else
-					{
-						complete();
-					}
-				}
-				else
-				{
-					for ( var i:int = 0; i < steps.length; i++ )
-					{
-						position = i;
-						IChain( this ).doProceed();
-					}
+					position = i;
+					IChain ( this ).doProceed ();
 				}
 			}
-		}
-
-
-		/**
-		 *
-		 */
-		public function stepError():void
-		{
-			dispatchEvent( new ChainEvent( ChainEvent.CHAIN_STEP_ERROR ) );
-
-			if ( !stopOnError )
-				proceed();
-			else
-				fail();
-		}
-
-
-		/**
-		 *
-		 */
-		public function complete():void
-		{
-			dispatchEvent( new ChainEvent( ChainEvent.CHAIN_COMPLETE ) );
-
-			_isComplete = true;
-
-			if ( chain != null )
-				chain.stepComplete();
-		}
-
-
-		/**
-		 *
-		 */
-		public function error():void
-		{
-			fail();
-		}
-
-
-		/**
-		 *
-		 */
-		protected function fail():void
-		{
-			dispatchEvent( new ChainEvent( ChainEvent.CHAIN_FAIL ) );
-
-			_isError = true;
-			_isComplete = true;
-
-			if ( chain != null )
-				chain.stepError();
 		}
 	}
+
+
+	/**
+	 *
+	 */
+	public function stepError ():void
+	{
+		dispatchEvent ( new ChainEvent ( ChainEvent.CHAIN_STEP_ERROR ) );
+
+		if ( !stopOnError )
+			proceed ();
+		else
+			fail ();
+	}
+
+
+	/**
+	 *
+	 */
+	public function complete ():void
+	{
+		dispatchEvent ( new ChainEvent ( ChainEvent.CHAIN_COMPLETE ) );
+
+		_isComplete = true;
+
+		if ( chain != null )
+			chain.stepComplete ();
+	}
+
+
+	/**
+	 *
+	 */
+	public function error ():void
+	{
+		fail ();
+	}
+
+
+	/**
+	 *
+	 */
+	protected function fail ():void
+	{
+		dispatchEvent ( new ChainEvent ( ChainEvent.CHAIN_FAIL ) );
+
+		_isError = true;
+		_isComplete = true;
+
+		if ( chain != null )
+			chain.stepError ();
+	}
+}
 }

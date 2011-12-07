@@ -17,11 +17,11 @@
 package com.heymoose.utils.chain.classes
 {
 
-	public interface IAsyncChainStep extends IChainStep
-	{
-		/**
-		 * Add a pending asynchronous operation to this chain step.
-		 */
-		function addAsynchronousOperation( operation:IAsynchronousOperation ):void;
-	}
+public interface IAsyncChainStep extends IChainStep
+{
+	/**
+	 * Add a pending asynchronous operation to this chain step.
+	 */
+	function addAsynchronousOperation ( operation:IAsynchronousOperation ):void;
+}
 }

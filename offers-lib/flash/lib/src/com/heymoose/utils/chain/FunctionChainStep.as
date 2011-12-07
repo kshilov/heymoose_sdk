@@ -17,30 +17,30 @@
 package com.heymoose.utils.chain
 {
 
-	import com.heymoose.utils.chain.classes.BaseChainStep;
-	import com.heymoose.utils.chain.classes.IAutonomousChainStep;
+import com.heymoose.utils.chain.classes.BaseChainStep;
+import com.heymoose.utils.chain.classes.IAutonomousChainStep;
 
-	public class FunctionChainStep extends BaseChainStep implements IAutonomousChainStep
+public class FunctionChainStep extends BaseChainStep implements IAutonomousChainStep
+{
+	public var functionRef:Function;
+	public var functionArgArray:Array;
+	public var functionThisArg:*;
+	public var returnValue:*;
+
+
+	public function FunctionChainStep ( functionRef:Function, functionArgArray:Array = null, functionThisArg:* = null )
 	{
-		public var functionRef:Function;
-		public var functionArgArray:Array;
-		public var functionThisArg:*;
-		public var returnValue:*;
-
-
-		public function FunctionChainStep( functionRef:Function, functionArgArray:Array = null, functionThisArg:* = null )
-		{
-			this.functionRef = functionRef;
-			this.functionArgArray = functionArgArray;
-			this.functionThisArg = functionThisArg;
-		}
-
-
-		public function doProceed():void
-		{
-			returnValue = functionRef.apply( functionThisArg, functionArgArray );
-
-			complete();
-		}
+		this.functionRef = functionRef;
+		this.functionArgArray = functionArgArray;
+		this.functionThisArg = functionThisArg;
 	}
+
+
+	public function doProceed ():void
+	{
+		returnValue = functionRef.apply ( functionThisArg, functionArgArray );
+
+		complete ();
+	}
+}
 }

@@ -17,20 +17,20 @@
 package com.heymoose.utils.chain.classes
 {
 
-	public interface IChainStep
-	{
-		function get chain():IChain;
+public interface IChainStep
+{
+	function get chain ():IChain;
 
 
-		function set chain( value:IChain ):void;
+	function set chain ( value:IChain ):void;
 
 
-		function get isComplete():Boolean;
+	function get isComplete ():Boolean;
 
 
-		function complete():void;
+	function complete ():void;
 
 
-		function error():void;
-	}
+	function error ():void;
+}
 }

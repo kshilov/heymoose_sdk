@@ -7,21 +7,21 @@
 package com.heymoose.utils.chain
 {
 
-	import com.heymoose.utils.chain.classes.BaseChainStep;
-	import com.heymoose.utils.chain.classes.IAutonomousChainStep;
+import com.heymoose.utils.chain.classes.BaseChainStep;
+import com.heymoose.utils.chain.classes.IAutonomousChainStep;
 
-	import flash.utils.setTimeout;
+import flash.utils.setTimeout;
 
-	public class PauseChainStep extends BaseChainStep implements IAutonomousChainStep
+public class PauseChainStep extends BaseChainStep implements IAutonomousChainStep
+{
+	public function PauseChainStep ()
 	{
-		public function PauseChainStep()
-		{
-		}
-
-
-		public function doProceed():void
-		{
-			setTimeout( complete, 200 );
-		}
 	}
+
+
+	public function doProceed ():void
+	{
+		setTimeout ( complete, 200 );
+	}
+}
 }

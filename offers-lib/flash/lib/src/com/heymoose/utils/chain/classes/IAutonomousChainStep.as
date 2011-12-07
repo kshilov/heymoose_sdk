@@ -17,11 +17,11 @@
 package com.heymoose.utils.chain.classes
 {
 
-	public interface IAutonomousChainStep extends IChainStep
-	{
-		/**
-		 * Proceed with execution of this chain step.
-		 */
-		function doProceed():void;
-	}
+public interface IAutonomousChainStep extends IChainStep
+{
+	/**
+	 * Proceed with execution of this chain step.
+	 */
+	function doProceed ():void;
+}
 }

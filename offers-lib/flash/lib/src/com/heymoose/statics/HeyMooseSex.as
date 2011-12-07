@@ -7,22 +7,22 @@
 package com.heymoose.statics
 {
 
-	public class HeyMooseSex
+public class HeyMooseSex
+{
+	public static var male:String = "MALE";
+	public static var female:String = "FEMALE";
+
+
+	public static function convert ( value:String, platform:String ):String
 	{
-		public static var male:String = "MALE";
-		public static var female:String = "FEMALE";
-
-
-		public static function convert( value:String, platform:String ):String
+		switch ( platform )
 		{
-			switch ( platform )
-			{
-				case HeyMoosePlatform.vkontakte:
-					if ( value == '1' ) return female;
-					if ( value == '2' ) return male;
-					break;
-			}
-			return "NULL"
+			case HeyMoosePlatform.vkontakte:
+				if ( value == '1' ) return female;
+				if ( value == '2' ) return male;
+				break;
 		}
+		return "NULL"
 	}
+}
 }

@@ -17,85 +17,85 @@
 package com.heymoose.utils.chain.classes
 {
 
-	public class BaseChainStep implements IChainStep
+public class BaseChainStep implements IChainStep
+{
+	/**
+	 * Backing variable for <code>chain</code> getter/setter.
+	 */
+	protected var _chain:IChain;
+
+	/**
+	 *
+	 */
+	public function get chain ():IChain
 	{
-		/**
-		 * Backing variable for <code>chain</code> getter/setter.
-		 */
-		protected var _chain:IChain;
+		return _chain;
+	}
 
-		/**
-		 *
-		 */
-		public function get chain():IChain
+
+	public function set chain ( value:IChain ):void
+	{
+		_chain = value;
+	}
+
+
+	/**
+	 * Backing variable for <code>failed</code> property.
+	 */
+	protected var _failed:Boolean = false;
+
+	/**
+	 * Indicates whether this step failed.
+	 */
+	public function get failed ():Boolean
+	{
+		return _failed;
+	}
+
+
+	/**
+	 * Backing variable for <code>isComplete</code> property.
+	 */
+	protected var _isComplete:Boolean = false;
+
+	public function get isComplete ():Boolean
+	{
+		return _isComplete;
+	}
+
+
+	public function BaseChainStep ()
+	{
+
+	}
+
+
+	/**
+	 *
+	 */
+	public function complete ():void
+	{
+		// before calling complete(), check if the chain step has been marked as error
+		if ( !_failed )
 		{
-			return _chain;
-		}
-
-
-		public function set chain( value:IChain ):void
-		{
-			_chain = value;
-		}
-
-
-		/**
-		 * Backing variable for <code>failed</code> property.
-		 */
-		protected var _failed:Boolean = false;
-
-		/**
-		 * Indicates whether this step failed.
-		 */
-		public function get failed():Boolean
-		{
-			return _failed;
-		}
-
-
-		/**
-		 * Backing variable for <code>isComplete</code> property.
-		 */
-		protected var _isComplete:Boolean = false;
-
-		public function get isComplete():Boolean
-		{
-			return _isComplete;
-		}
-
-
-		public function BaseChainStep()
-		{
-
-		}
-
-
-		/**
-		 *
-		 */
-		public function complete():void
-		{
-			// before calling complete(), check if the chain step has been marked as error
-			if ( !_failed )
-			{
-				_isComplete = true;
-
-				if ( chain != null )
-					chain.stepComplete();
-			}
-		}
-
-
-		/**
-		 *
-		 */
-		public function error():void
-		{
-			_failed = true;
 			_isComplete = true;
 
 			if ( chain != null )
-				chain.stepError();
+				chain.stepComplete ();
 		}
 	}
+
+
+	/**
+	 *
+	 */
+	public function error ():void
+	{
+		_failed = true;
+		_isComplete = true;
+
+		if ( chain != null )
+			chain.stepError ();
+	}
+}
 }

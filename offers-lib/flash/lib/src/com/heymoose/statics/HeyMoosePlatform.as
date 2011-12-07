@@ -7,10 +7,10 @@
 package com.heymoose.statics
 {
 
-	public class HeyMoosePlatform
-	{
-		public static var vkontakte:String = "VKONTAKTE";
-		public static var odnoklassniki:String = "ODNOKLASSNIKI";
-		public static var facbook:String = "FACEBOOK";
-	}
+public class HeyMoosePlatform
+{
+	public static var vkontakte:String = "VKONTAKTE";
+	public static var odnoklassniki:String = "ODNOKLASSNIKI";
+	public static var facbook:String = "FACEBOOK";
+}
 }
