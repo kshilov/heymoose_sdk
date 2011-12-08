@@ -23,18 +23,18 @@ public class Banner extends MovieClip
 {
 	protected var bannerWidth:int;
 	protected var bannerHeight:int;
-	protected var bannerSizeId:int;
+	protected var bannerSizeId:String;
 	protected var offers:Array;
 	protected var services:HeyMoose;
 
 	protected var currentOfferIndex:int = 0;
 
-	public function Banner ( size:String = "0 x 0", backgroundColor:uint = 0xFFFFFF, backgroundAlpha:Number = 0.8, services:HeyMoose = null )
+	public function Banner ( size:String = "0x0", backgroundColor:uint = 0xFFFFFF, backgroundAlpha:Number = 0.8, services:HeyMoose = null )
 	{
 		this.services = services;
-		bannerWidth = int ( size.split ( " x " )[0] );
-		bannerHeight = int ( size.split ( " x " )[1] );
-		bannerSizeId = int ( size.split ( " x " )[2] );
+		bannerWidth = int ( size.split ( "x" )[0] );
+		bannerHeight = int ( size.split ( "x" )[1] );
+		bannerSizeId = size;
 
 		graphics.beginFill ( backgroundColor, backgroundAlpha );
 		graphics.lineStyle ( 1, 0, 0.5 );
