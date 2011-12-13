@@ -8,12 +8,11 @@ package com.heymoose.offer.event
 {
 import flash.events.Event;
 
-import mx.utils.ObjectUtil;
-
 public class BannerEvent extends Event
 {
 	public static const SHOW:String = "com.heymoose.offer.event.show";
 	public static const CLICK:String = "com.heymoose.offer.event.click";
+	public static const CLOSE_WINDOW:String = "com.heymoose.offer.event.closeWindow";
 
 	public var offer:Object;
 

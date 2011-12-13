@@ -1,0 +1,1 @@
+compc -load-config config.xml

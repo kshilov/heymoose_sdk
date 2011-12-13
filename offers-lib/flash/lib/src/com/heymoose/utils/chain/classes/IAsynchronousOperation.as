@@ -16,8 +16,7 @@
 
 package com.heymoose.utils.chain.classes
 {
-
-import mx.rpc.IResponder;
+import com.heymoose.core.net.IResponder;
 
 public interface IAsynchronousOperation
 {

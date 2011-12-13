@@ -4,34 +4,28 @@
  * Date: 12/7/11
  * Time: 8:18 PM
  */
-package com.heymoose.offer
+package com.heymoose.core.ui.classes
 {
-import by.blooddy.crypto.serialization.JSON;
-
-import com.heymoose.HeyMoose;
+import com.heymoose.core.HeyMoose;
+import com.heymoose.core.OffersBase;
 import com.heymoose.offer.event.BannerEvent;
 
-import flash.display.MovieClip;
 import flash.events.MouseEvent;
 import flash.net.URLRequest;
 import flash.net.navigateToURL;
 
-import mx.rpc.events.FaultEvent;
-import mx.rpc.events.ResultEvent;
-
-public class Banner extends MovieClip
+public class Banner extends OffersBase
 {
 	protected var bannerWidth:int;
 	protected var bannerHeight:int;
 	protected var bannerSizeId:String;
-	protected var offers:Array;
-	protected var services:HeyMoose;
+
 
 	protected var currentOfferIndex:int = 0;
 
 	public function Banner ( size:String = "0x0", backgroundColor:uint = 0xFFFFFF, backgroundAlpha:Number = 0.8, services:HeyMoose = null )
 	{
-		this.services = services;
+		super ( services );
 		bannerWidth = int ( size.split ( "x" )[0] );
 		bannerHeight = int ( size.split ( "x" )[1] );
 		bannerSizeId = size;
@@ -50,18 +44,6 @@ public class Banner extends MovieClip
 		navigateToURL ( new URLRequest ( services.doOffer ( offers[currentOfferIndex].id ) ) );
 	}
 
-	private function getOffersResult ( result:ResultEvent ):void
-	{
-		var resultObject:Object = JSON.decode ( result.result.toString () );
-		offers = resultObject.result;
-
-		if ( !offers || offers.length == 0 ) return;
-	}
-
-	protected function fault ( fault:FaultEvent ):void
-	{
-
-	}
 
 	protected function nextOffer ():void
 	{

@@ -8,23 +8,22 @@ package com.heymoose.offer
 {
 
 import by.blooddy.crypto.Base64;
-import by.blooddy.crypto.serialization.JSON;
 
-import com.heymoose.HeyMoose;
+import com.heymoose.core.HeyMoose;
+import com.heymoose.core.net.AsyncToken;
+import com.heymoose.core.net.Responder;
+import com.heymoose.core.ui.classes.Banner;
 import com.heymoose.utils.chain.Chain;
 
 import flash.display.Bitmap;
 import flash.display.DisplayObject;
 import flash.display.Loader;
 import flash.events.Event;
+import flash.events.IOErrorEvent;
 import flash.events.TimerEvent;
 import flash.utils.Timer;
 
-import mx.rpc.AsyncToken;
-import mx.rpc.Responder;
-import mx.rpc.events.ResultEvent;
-
-public class ImageBanner extends Banner
+public final class ImageBanner extends Banner
 {
 	private var rotateTimer:Timer;
 	private var loader:Loader = new Loader ();
@@ -37,6 +36,8 @@ public class ImageBanner extends Banner
 		super ( size, backgroundColor, backgroundAlpha, services );
 
 		loader.contentLoaderInfo.addEventListener ( Event.COMPLETE, offerBannerLoaded );
+		loader.addEventListener ( IOErrorEvent.IO_ERROR, loader_ioErrorHandler );
+		loader.contentLoaderInfo.addEventListener ( IOErrorEvent.IO_ERROR, loader_ioErrorHandler );
 	}
 
 
@@ -61,10 +62,9 @@ public class ImageBanner extends Banner
 	}
 
 
-	private function getOffersResult ( result:ResultEvent ):void
+	override protected function getOffersResult ( result:String ):void
 	{
-		var resultObject:Object = JSON.decode ( result.result.toString () );
-		offers = resultObject.result;
+		super.getOffersResult ( result );
 
 		if ( !offers || offers.length == 0 ) return;
 
@@ -111,10 +111,9 @@ public class ImageBanner extends Banner
 		image.y = Math.floor ( ((bannerHeight - 1) - image.height) / 2 ) + 1;
 	}
 
-
-	private function doOfferResult ( event:ResultEvent ):void
+	private function loader_ioErrorHandler ( event:IOErrorEvent ):void
 	{
-		trace ( event );
+		trace ( offers[currentOfferIndex].id, event )
 	}
 }
 }

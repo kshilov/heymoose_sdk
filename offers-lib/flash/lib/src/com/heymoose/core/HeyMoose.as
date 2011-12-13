@@ -4,13 +4,13 @@
  * Date: 11/23/11
  * Time: 11:29 PM
  */
-package com.heymoose
+package com.heymoose.core
 {
 
 import by.blooddy.crypto.MD5;
 
-import mx.rpc.AsyncToken;
-import mx.rpc.http.HTTPService;
+import com.heymoose.core.net.AsyncToken;
+
 
 public class HeyMoose
 {
@@ -24,11 +24,9 @@ public class HeyMoose
 	private var platform:String;
 	private var rewardCallback:Function;
 
-	private var services:HTTPService;
-
-
 	public function HeyMoose ()
 	{
+
 	}
 
 
@@ -47,10 +45,6 @@ public class HeyMoose
 		this.uid = uid;
 		this.platform = platform;
 		this.rewardCallback = rewardCallback;
-
-		services = new HTTPService ();
-		services.method = 'GET';
-		services.resultFormat = 'text';
 	}
 
 
@@ -98,6 +92,7 @@ public class HeyMoose
 	//////////////////////////////////////////
 	private function send ( params:Object ):AsyncToken
 	{
+
 		params['format'] = 'JSON';
 		params['platform'] = platform;
 		params['app_id'] = appId;
@@ -105,9 +100,8 @@ public class HeyMoose
 		params['nocache'] = Math.random ();
 		params['sig'] = generateSig ( params );
 
-		services.url = "http://heymoose.com/rest_api/api"
-
-		return services.send ( params );
+		var token:AsyncToken = new AsyncToken ();
+		return token.send ( "http://heymoose.com/rest_api/api", params );
 	}
 
 
@@ -120,15 +114,13 @@ public class HeyMoose
 		params['nocache'] = Math.random ();
 		params['sig'] = generateSig ( params );
 
-		services.url = "http://heymoose.com/rest_api/api"
-
 		var stringParams:Array = new Array ();
 		for ( var param:String in params )
 		{
 			stringParams.push ( param + "=" + params[param] );
 		}
 
-		return services.url + "?" + stringParams.join ( "&" );
+		return "http://heymoose.com/rest_api/api" + "?" + stringParams.join ( "&" );
 	}
 
 

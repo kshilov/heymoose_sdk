@@ -7,9 +7,10 @@
 package com.heymoose.offer
 {
 
-import by.blooddy.crypto.serialization.JSON;
-
-import com.heymoose.HeyMoose;
+import com.heymoose.core.HeyMoose;
+import com.heymoose.core.net.AsyncToken;
+import com.heymoose.core.net.Responder;
+import com.heymoose.core.ui.classes.Banner;
 import com.heymoose.utils.chain.Chain;
 
 import flash.events.NetStatusEvent;
@@ -17,12 +18,7 @@ import flash.media.Video;
 import flash.net.NetConnection;
 import flash.net.NetStream;
 
-import mx.rpc.AsyncToken;
-import mx.rpc.Responder;
-import mx.rpc.events.ResultEvent;
-import mx.utils.ObjectUtil;
-
-public class VideoBanner extends Banner
+public final class VideoBanner extends Banner
 {
 	private var time:int;
 	private var video:Video;
@@ -72,10 +68,9 @@ public class VideoBanner extends Banner
 	}
 
 
-	private function getOffersResult ( result:ResultEvent ):void
+	override protected function getOffersResult ( result:String ):void
 	{
-		var resultObject:Object = JSON.decode ( result.result.toString () );
-		offers = resultObject.result;
+		super.getOffersResult ( result );
 
 		if ( !offers || offers.length == 0 ) return;
 
@@ -95,7 +90,7 @@ public class VideoBanner extends Banner
 
 	private function cuePointHandler ( infoObject:Object ):void
 	{
-		trace ( ObjectUtil.toString ( infoObject ) );
+
 	}
 
 

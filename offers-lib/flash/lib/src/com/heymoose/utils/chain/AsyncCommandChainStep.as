@@ -17,13 +17,10 @@
 package com.heymoose.utils.chain
 {
 
+import com.heymoose.core.net.AsyncToken;
+import com.heymoose.core.net.IResponder;
 import com.heymoose.utils.chain.classes.BaseChainStep;
 import com.heymoose.utils.chain.classes.IAutonomousChainStep;
-
-import mx.messaging.messages.HTTPRequestMessage;
-import mx.rpc.AsyncToken;
-import mx.rpc.IResponder;
-import mx.rpc.events.FaultEvent;
 
 public class AsyncCommandChainStep extends BaseChainStep implements IResponder, IAutonomousChainStep
 {
@@ -134,16 +131,7 @@ public class AsyncCommandChainStep extends BaseChainStep implements IResponder, 
 			}
 		}
 		{
-			// Global trace handler
-			var url:String = HTTPRequestMessage ( FaultEvent ( info ).token.message ).url
-			var body:Object = HTTPRequestMessage ( FaultEvent ( info ).token.message ).body
-			var text:String = info.statusCode + " " + info.fault.faultCode + "\n\n";
-			text += url + "\n";
-			for ( var i:String in body )
-			{
-				text += i + ": " + body[i] + "\n"
-			}
-			trace ( text )
+			trace ( info )
 		}
 
 		error ();

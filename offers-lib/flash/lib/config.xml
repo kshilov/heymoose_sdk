@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<flex-config>
+
+    <target-player>10.2.0</target-player>
+    <include-sources>
+        <path-element>src</path-element>
+    </include-sources>
+    <compiler>
+        <source-path>
+            <path-element>src</path-element>
+        </source-path>
+        <external-library-path>
+            <path-element>
+                ${flexlib}/libs/player/{targetPlayerMajorVersion}.{targetPlayerMinorVersion}/playerglobal.swc
+            </path-element>
+        </external-library-path>
+
+        <library-path>
+            <path-element>libs/blooddy_crypto.swc</path-element>
+        </library-path>
+    </compiler>
+    <output>bin/heymoose.swc</output>
+
+</flex-config>
