@@ -141,6 +141,10 @@ public class HeyMoose
 		var res:String = "";
 		for each ( var thisKey:* in Keys )
 		{
+			if(dct[thisKey] == null)
+			{
+				continue;
+			}
 			res += thisKey.toString ();
 			res += "=";
 			res += dct[thisKey].toString ();
