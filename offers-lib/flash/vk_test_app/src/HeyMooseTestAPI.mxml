@@ -62,7 +62,7 @@
             // INIT HeyMoose lib
             HeyMoose.instance.init ( 16, "67c629b3-ebe7-411d-a793-238a43c29463", "1507618", HeyMoosePlatform.vkontakte, rewardCallback );
             // set performer
-            HeyMoose.instance.setPerformer ( sex, year );
+            HeyMoose.instance.setPerformer ( sex, year, null );
 
             // create new banner
              var vbanner:VideoBanner = new VideoBanner( BannerSize.SIZE_234x60 );

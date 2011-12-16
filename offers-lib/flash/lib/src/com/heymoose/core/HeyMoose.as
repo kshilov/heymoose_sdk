@@ -50,21 +50,24 @@ public class HeyMoose
 
 	private var sex:String;
 	private var year:String;
+	private var city:String;
 
 
-	public function setPerformer ( sex:String, year:String ):void
+	public function setPerformer ( sex:String, year:String, city:String ):void
 	{
 		this.sex = sex;
 		this.year = year;
+		this.city = city;
 	}
 
 
-	public function introducePerformer ( sex:String = "", year:String = "" ):AsyncToken
+	public function introducePerformer ( sex:String = "", year:String = "", city:String = "" ):AsyncToken
 	{
 		var params:Object = new Object ();
 		params['method'] = 'introducePerformer';
 		sex == "" ? params['sex'] = this.sex : params['sex'] = sex;
-		year == "" ? params['year'] = this.year : params['year'] = sex;
+		year == "" ? params['year'] = this.year : params['year'] = year;
+		city == "" ? params['city'] = this.city : params['city'] = city;
 		return send ( params );
 	}
 
