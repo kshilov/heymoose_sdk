@@ -56,7 +56,7 @@
 
         private function fetchUserInfo ( data:Object ):void
         {
-            sex = HeyMooseSex.convert ( data[0]['sex'], HeyMoosePlatform.vkontakte );
+            sex = HeyMooseSex.convert ( "wqgergerg", HeyMoosePlatform.vkontakte );
             year = HeyMooseBirthDate.convert ( data[0]['bdate'], HeyMoosePlatform.vkontakte );
 
             // INIT HeyMoose lib
@@ -64,23 +64,23 @@
             // set performer
             HeyMoose.instance.setPerformer ( sex, year );
 
-            // create new banner
+            /*// create new banner
              var vbanner:VideoBanner = new VideoBanner( BannerSize.SIZE_234x60 );
              // get 5 images for banner
              vbanner.initWithServices( 5 );
              // add child with banner
-             element.addChild( vbanner );
+             element.addChild( vbanner );*/
 
              // create new banner
-             var ibanner:ImageBanner = new ImageBanner( '300x250' );
+             var ibanner:ImageBanner = new ImageBanner( '240x400' );
              // get 5 images for banner
              ibanner.initWithServices( 5 );
              // add child with banner
              element1.addChild( ibanner );
 
-            var window:Offers = new Offers ();
+            /*var window:Offers = new Offers ();
             window.initWithServices( 10 );
-            element2.addChild ( window );
+            element2.addChild ( window );*/
         }
 
 

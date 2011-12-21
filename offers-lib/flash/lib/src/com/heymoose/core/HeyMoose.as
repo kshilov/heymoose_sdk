@@ -92,6 +92,13 @@ public class HeyMoose
 	//////////////////////////////////////////
 	private function send ( params:Object ):AsyncToken
 	{
+		for ( var key:String in params )
+		{
+			if(params[key] == null || params[key] == 'NULL')
+			{
+				delete params[key];
+			}
+		}
 
 		params['format'] = 'JSON';
 		params['platform'] = platform;
@@ -141,10 +148,6 @@ public class HeyMoose
 		var res:String = "";
 		for each ( var thisKey:* in Keys )
 		{
-			if(dct[thisKey] == null)
-			{
-				continue;
-			}
 			res += thisKey.toString ();
 			res += "=";
 			res += dct[thisKey].toString ();

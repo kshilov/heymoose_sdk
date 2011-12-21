@@ -33,10 +33,6 @@ public class AsyncToken extends EventDispatcher
 		var variables:URLVariables = new URLVariables ();
 		for ( var key:String in params )
 		{
-			if(params[key] == null)
-			{
-				continue;
-			}
 			variables[key] = params[key];
 		}
 		request.data = variables;
