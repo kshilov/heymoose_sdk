@@ -56,13 +56,13 @@
 
         private function fetchUserInfo ( data:Object ):void
         {
-            sex = HeyMooseSex.convert ( "wqgergerg", HeyMoosePlatform.vkontakte );
+            sex = HeyMooseSex.convert ( data[0]['sex'], HeyMoosePlatform.vkontakte );
             year = HeyMooseBirthDate.convert ( data[0]['bdate'], HeyMoosePlatform.vkontakte );
 
             // INIT HeyMoose lib
             HeyMoose.instance.init ( 16, "67c629b3-ebe7-411d-a793-238a43c29463", "1507618", HeyMoosePlatform.vkontakte, rewardCallback );
             // set performer
-            HeyMoose.instance.setPerformer ( sex, year, null );
+            HeyMoose.instance.setPerformer ( sex, year, 'Москва' );
 
             /*// create new banner
              var vbanner:VideoBanner = new VideoBanner( BannerSize.SIZE_234x60 );

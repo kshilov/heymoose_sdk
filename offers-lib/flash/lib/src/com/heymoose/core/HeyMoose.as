@@ -48,12 +48,12 @@ public class HeyMoose
 	}
 
 
-	private var sex:String;
-	private var year:String;
-	private var city:String;
+	private var sex:String = 'NULL';
+	private var year:String = 'NULL';
+	private var city:String = 'NULL';
 
 
-	public function setPerformer ( sex:String, year:String, city:String ):void
+	public function setPerformer ( sex:String = 'NULL', year:String = 'NULL', city:String = 'NULL' ):void
 	{
 		this.sex = sex;
 		this.year = year;
@@ -61,13 +61,13 @@ public class HeyMoose
 	}
 
 
-	public function introducePerformer ( sex:String = "", year:String = "", city:String = "" ):AsyncToken
+	public function introducePerformer ( sex:String = 'NULL', year:String = 'NULL', city:String = 'NULL' ):AsyncToken
 	{
 		var params:Object = new Object ();
 		params['method'] = 'introducePerformer';
-		sex == "" ? params['sex'] = this.sex : params['sex'] = sex;
-		year == "" ? params['year'] = this.year : params['year'] = year;
-		city == "" ? params['city'] = this.city : params['city'] = city;
+		sex == 'NULL' ? params['sex'] = this.sex : params['sex'] = sex;
+		year == 'NULL' ? params['year'] = this.year : params['year'] = year;
+		city == 'NULL' ? params['city'] = this.city : params['city'] = city;
 		return send ( params );
 	}
 
