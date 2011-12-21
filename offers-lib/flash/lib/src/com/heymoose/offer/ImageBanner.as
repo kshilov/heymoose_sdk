@@ -21,6 +21,7 @@ import flash.display.Loader;
 import flash.events.Event;
 import flash.events.IOErrorEvent;
 import flash.events.TimerEvent;
+import flash.system.Security;
 import flash.utils.Timer;
 
 public final class ImageBanner extends Banner
@@ -96,9 +97,21 @@ public final class ImageBanner extends Banner
 		if ( image )
 			removeChild ( image );
 		image = addChild ( loader.content );
-		Bitmap ( image ).smoothing = true;
-		var verticalAspect:Number = (bannerHeight - 1) / image.height;
-		var horizontalAspect:Number = (bannerWidth - 1) / image.width;
+		loader.contentLoaderInfo.applicationDomain
+
+		switch(loader.contentLoaderInfo.contentType)
+		{
+			case 'application/x-shockwave-flash':
+			break;
+			case 'image/jpeg':
+				Bitmap ( image ).smoothing = true;
+			break;
+			case 'image/gif':
+				Bitmap ( image ).smoothing = true;
+			break;
+		}
+		var verticalAspect:Number = (bannerHeight - 1) / loader.contentLoaderInfo.height;
+		var horizontalAspect:Number = (bannerWidth - 1) / loader.contentLoaderInfo.width;
 		if ( verticalAspect > horizontalAspect )
 		{
 			image.scaleX = image.scaleY = horizontalAspect;
@@ -107,8 +120,9 @@ public final class ImageBanner extends Banner
 		{
 			image.scaleX = image.scaleY = verticalAspect;
 		}
-		image.x = Math.floor ( ((bannerWidth - 1) - image.width) / 2 ) + 1;
-		image.y = Math.floor ( ((bannerHeight - 1) - image.height) / 2 ) + 1;
+		image.x = Math.floor ( ((bannerWidth - 1) - loader.contentLoaderInfo.width) / 2 ) + 1;
+		image.y = Math.floor ( ((bannerHeight - 1) - loader.contentLoaderInfo.height) / 2 ) + 1;
+
 	}
 
 	private function loader_ioErrorHandler ( event:IOErrorEvent ):void
