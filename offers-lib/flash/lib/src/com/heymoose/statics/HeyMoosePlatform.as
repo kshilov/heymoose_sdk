@@ -11,6 +11,7 @@ public class HeyMoosePlatform
 {
 	public static var vkontakte:String = "VKONTAKTE";
 	public static var odnoklassniki:String = "ODNOKLASSNIKI";
-	public static var facbook:String = "FACEBOOK";
+	public static var moimir:String = "MOIMIR";
+	public static var facebook:String = "FACEBOOK";
 }
 }
