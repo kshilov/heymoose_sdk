@@ -6,10 +6,14 @@
  */
 package com.heymoose.core.net
 {
+import flash.events.Event;
+
 public interface IResponder
 {
 	function result ( data:Object ):void;
 
 	function fault ( info:Object ):void;
+
+	function log ( token:AsyncToken, event:Event ):void;
 }
 }

@@ -10,9 +10,18 @@ package com.heymoose.core
 import by.blooddy.crypto.MD5;
 
 import com.heymoose.core.net.AsyncToken;
+import com.heymoose.core.net.Responder;
+import com.heymoose.utils.log.Log;
+import com.heymoose.utils.log.LogEvent;
+import com.heymoose.utils.log.LogItem;
 
+import flash.events.Event;
+import flash.events.EventDispatcher;
+import flash.events.IOErrorEvent;
+import flash.utils.Dictionary;
+import flash.utils.getTimer;
 
-public class HeyMoose
+public class HeyMoose extends EventDispatcher
 {
 	public static var _instance:HeyMoose;
 
@@ -25,6 +34,11 @@ public class HeyMoose
 	private var rewardCallback:Function;
 	
 	private var showedOffers:Array;
+	
+	public var log:Log;
+	private var tokenToLogItem:Dictionary = new Dictionary();
+
+	public var version:String = "0.10";
 
 	public function HeyMoose ()
 	{
@@ -90,16 +104,25 @@ public class HeyMoose
 		params['offer_id'] = offerId;
 		return getString ( params );
 	}
-	public function reportShow ( offer:Object ):AsyncToken
+
+	public function doOfferLog ( offerId:String ):AsyncToken
 	{
-		if(showedOffers.indexOf(offer.id)  > -1 )
+		var params:Object = new Object ();
+		params['method'] = 'doOffer';
+		params['offer_id'] = offerId;
+		return send ( params );
+	}
+
+	public function reportShow ( offerId:String ):AsyncToken
+	{
+		if(showedOffers.indexOf(offerId)  > -1 )
 			return null;
 
-		showedOffers.push(offer.id);
+		showedOffers.push(offerId);
 
 		var params:Object = new Object ();
 		params['method'] = 'reportShow';
-		params['offer_id'] = offer.id.toString();
+		params['offer_id'] = offerId;
 		return send ( params );
 	}
 
@@ -108,6 +131,59 @@ public class HeyMoose
 	// Atomic send
 	//////////////////////////////////////////
 	private function send ( params:Object ):AsyncToken
+	{
+		var token:AsyncToken = new AsyncToken ();
+
+		for ( var key:String in params )
+		{
+			if(params[key] == null || params[key] == 'NULL')
+			{
+				delete params[key];
+			}
+		}
+
+		params['format'] = 'JSON';
+		params['platform'] = platform;
+		params['app_id'] = appId;
+		params['uid'] = uid;
+		params['nocache'] = Math.random ();
+		params['sig'] = generateSig ( params );
+
+		// LOG
+		if(log)
+		{
+			token.addResponder(new Responder(null, null, logToken));
+			var logItem:LogItem = new LogItem(token);
+			logItem.startTime = getTimer();
+			logItem.request = generateString(params);
+			logItem.method = params['method']
+			log.sourceArray.unshift(logItem);
+			tokenToLogItem[token] = logItem;
+			log.dispatchEvent(new LogEvent());
+		}
+
+		return token.send ( "http://heymoose.com/rest_api/api", params );
+	}
+	private function logToken ( token:AsyncToken, event:Event ):void
+	{
+		var logItem:LogItem = LogItem(tokenToLogItem[token]);
+		switch(event.type)
+		{
+			case Event.COMPLETE:
+				logItem.result = event.target.data;
+			break;
+			case IOErrorEvent.IO_ERROR:
+				logItem.result = IOErrorEvent(event).text;
+				logItem.fault = true;
+			break;
+		}
+		logItem.endTime = getTimer();
+		log.dispatchEvent(new LogEvent());
+		delete tokenToLogItem[token];
+	}
+
+
+	private function getString ( params:Object ):String
 	{
 		for ( var key:String in params )
 		{
@@ -124,20 +200,11 @@ public class HeyMoose
 		params['nocache'] = Math.random ();
 		params['sig'] = generateSig ( params );
 
-		var token:AsyncToken = new AsyncToken ();
-		return token.send ( "http://heymoose.com/rest_api/api", params );
+		return generateString( params )
 	}
 
-
-	private function getString ( params:Object ):String
+	private function generateString ( params:Object ):String
 	{
-		params['format'] = 'JSON';
-		params['platform'] = platform;
-		params['app_id'] = appId;
-		params['uid'] = uid;
-		params['nocache'] = Math.random ();
-		params['sig'] = generateSig ( params );
-
 		var stringParams:Array = new Array ();
 		for ( var param:String in params )
 		{
@@ -183,5 +250,7 @@ public class HeyMoose
 		}
 		return output;
 	}
+
+	
 }
 }

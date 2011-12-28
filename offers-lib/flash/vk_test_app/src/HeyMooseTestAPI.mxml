@@ -1,24 +1,44 @@
 <?xml version="1.0"?>
 <s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark"
-			   xmlns:mx="library://ns.adobe.com/flex/mx"
-			   addedToStage="onAddedToStage(event)">
-	<fx:Script>
+               xmlns:mx="library://ns.adobe.com/flex/mx" creationComplete="creationCompleteHandler(event)">
+    <fx:Script>
 		<![CDATA[
+        import by.blooddy.crypto.serialization.JSON;
+
         import com.heymoose.core.HeyMoose;
-        import com.heymoose.offer.ImageBanner;
-        import com.heymoose.offer.Offers;
-        import com.heymoose.offer.VideoBanner;
-        import com.heymoose.statics.BannerSize;
-        import com.heymoose.statics.HeyMooseBirthDate;
         import com.heymoose.statics.HeyMoosePlatform;
         import com.heymoose.statics.HeyMooseSex;
+        import com.heymoose.utils.log.Log;
+        import com.heymoose.utils.log.LogEvent;
 
-        import vk.APIConnection;
+        import mx.collections.ArrayCollection;
+        import mx.events.FlexEvent;
+        import mx.utils.ObjectUtil;
+
+        import spark.events.IndexChangeEvent;
 
         [Bindable]
-        public var sex:String;
+        public var sex:String = HeyMooseSex.male;
         [Bindable]
-        public var year:String;
+        public var appId:int = 16;
+        [Bindable]
+        public var secret:String = "67c629b3-ebe7-411d-a793-238a43c29463";
+        [Bindable]
+        public var user:String = "1507618";
+        [Bindable]
+        public var year:String = '1984';
+        [Bindable]
+        public var city:String = "";
+        [Bindable]
+        public var platform:String = HeyMoosePlatform.vkontakte;
+        [Bindable]
+        public var loger:Log = new Log ();
+
+        [Bindable]
+        public var filter:String = "1:1:300x250";
+
+        [Bindable]
+        public var offerId:String = "0";
 
 
         private function rewardCallback ( payment:int ):String
@@ -35,34 +55,18 @@
             return coins.toString () + str;
         }
 
-
-        private function onAddedToStage ( e:Event ):void
+        private function creationCompleteHandler ( event:FlexEvent ):void
         {
-            var flashVars:Object = stage.loaderInfo.parameters as Object;
-            if ( !flashVars.api_id )
-            {
-                flashVars['api_id'] = '2696375';
-                flashVars['viewer_id'] = '154632973';
-                flashVars['sid'] = 'bf9bce1f48a1e7f61dcc911bdfe53d96d7726410016190f9e58ca4fe156d45';
-                flashVars['secret'] = '2a71a1242c';
-            }
-
-            var VK:APIConnection = new APIConnection ( flashVars );
-
-            // Example of API request
-            VK.api ( 'getProfiles', { uids:flashVars['viewer_id'], fields:'sex,bdate' }, fetchUserInfo, onApiRequestFail );
+            loger.addEventListener ( LogEvent.UPDATE_LOG, logHandler )
         }
 
-
-        private function fetchUserInfo ( data:Object ):void
+        private function fetchUserInfo ():void
         {
-            sex = HeyMooseSex.convert ( data[0]['sex'], HeyMoosePlatform.vkontakte );
-            year = HeyMooseBirthDate.convert ( data[0]['bdate'], HeyMoosePlatform.vkontakte );
-
             // INIT HeyMoose lib
-            HeyMoose.instance.init ( 16, "67c629b3-ebe7-411d-a793-238a43c29463", "1507618", HeyMoosePlatform.vkontakte, rewardCallback );
+            HeyMoose.instance.init ( appId, secret, user, platform, rewardCallback );
             // set performer
-            HeyMoose.instance.setPerformer ( sex, year, 'Москва' );
+            HeyMoose.instance.log = loger;
+            HeyMoose.instance.introducePerformer ( sex, year, city );
 
             /*// create new banner
              var vbanner:VideoBanner = new VideoBanner( BannerSize.SIZE_234x60 );
@@ -71,33 +75,117 @@
              // add child with banner
              element.addChild( vbanner );*/
 
-             // create new banner
-             var ibanner:ImageBanner = new ImageBanner( '300x250' );
-             // get 5 images for banner
-             ibanner.initWithServices( 5 );
-             // add child with banner
-             element1.addChild( ibanner );
+            // create new banner
+            //var ibanner:ImageBanner = new ImageBanner ( '300x250' );
+            // get 5 images for banner
+            //ibanner.initWithServices ( 5 );
+            // add child with banner
+            //element1.addChild( ibanner );
 
             /*var window:Offers = new Offers ();
-            window.initWithServices( 10 );
-            element2.addChild ( window );*/
+             window.initWithServices( 10 );
+             element2.addChild ( window );*/
         }
 
-
-        private function onApiRequestFail ( data:Object ):void
+        private function logHandler ( event:LogEvent ):void
         {
-            trace ( "Error: " + data.error_msg + "\n" );
+            logView.dataProvider = new ArrayCollection ( loger.sourceArray );
+        }
+
+        private function sexSelector_changeHandler ( event:IndexChangeEvent ):void
+        {
+            sex = sexSelector.selectedItem.value;
+        }
+
+        private function platformSelector_changeHandler ( event:IndexChangeEvent ):void
+        {
+            platform = platformSelector.selectedItem.value;
+        }
+
+        private function logView_changeHandler ( event:IndexChangeEvent ):void
+        {
+            request.text = logView.selectedItem.request.split ( "&" ).join ( '\n&' );
+            if ( logView.selectedItem.fault )
+            {
+                result.text = logView.selectedItem.result;
+            }
+            else
+            {
+                result.text = ObjectUtil.toString ( JSON.decode ( logView.selectedItem.result ) );
+            }
+
         }
         ]]>
 	</fx:Script>
     <s:Scroller width="100%" height="100%">
-        <s:VGroup paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10">
-            <s:Label text="Sex: {sex}"/>
-            <s:Label text="Year: {year}"/>
-            <mx:UIComponent id="element" height="60"/>
-            <mx:UIComponent id="element1" height="250"/>
-            <mx:UIComponent id="element2" height="500" width="600"/>
-        </s:VGroup>
+        <s:HGroup width="100%" height="100%" paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10">
+            <mx:Accordion height="100%">
+                <s:NavigatorContent label="introducePerformer">
+                    <s:Form>
+                        <s:FormItem label="Пол">
+                            <s:ComboBox id="sexSelector"
+                                        dataProvider="{new ArrayCollection(HeyMooseSex.list)}"
+                                        labelField="label"
+                                        selectedIndex="1"
+                                        change="sexSelector_changeHandler(event)"/>
+                        </s:FormItem>
+                        <s:FormItem label="Год рождения">
+                            <s:TextInput text="@{year}"/>
+                        </s:FormItem>
+                        <s:FormItem label="Город">
+                            <s:TextInput text="@{city}"/>
+                        </s:FormItem>
+                        <s:FormItem label="ID приложения">
+                            <s:NumericStepper value="@{appId}" maximum="500"/>
+                        </s:FormItem>
+                        <s:FormItem label="Secret">
+                            <s:TextInput text="@{secret}"/>
+                        </s:FormItem>
+                        <s:FormItem label="UID">
+                            <s:TextInput text="@{user}"/>
+                        </s:FormItem>
+                        <s:FormItem label="Платформа">
+                            <s:ComboBox id="platformSelector"
+                                        dataProvider="{new ArrayCollection(HeyMoosePlatform.list)}"
+                                        labelField="label"
+                                        selectedIndex="0"
+                                        change="platformSelector_changeHandler(event)"/>
+                        </s:FormItem>
+                        <s:Button label="introducePerformer" click="fetchUserInfo()"/>
+                    </s:Form>
+                </s:NavigatorContent>
+                <s:NavigatorContent label="getOffers">
+                    <s:Form>
+                        <s:FormItem label="Фильтр">
+                            <s:TextInput text="@{filter}"/>
+                        </s:FormItem>
+                        <s:Button label="getOffers" click="HeyMoose.instance.getOffers(filter)"/>
+                    </s:Form>
+                </s:NavigatorContent>
+                <s:NavigatorContent label="doOffer">
+                    <s:Form>
+                        <s:FormItem label="Идентификатор оффера">
+                            <s:TextInput text="@{offerId}"/>
+                        </s:FormItem>
+                        <s:Button label="doOffer" click="HeyMoose.instance.doOfferLog(offerId)"/>
+                    </s:Form>
+                </s:NavigatorContent>
+                <s:NavigatorContent label="reportShow">
+                    <s:Form>
+                        <s:FormItem label="Идентификатор оффера">
+                            <s:TextInput text="@{offerId}"/>
+                        </s:FormItem>
+                        <s:Button label="reportShow" click="HeyMoose.instance.reportShow(offerId)"/>
+                    </s:Form>
+                </s:NavigatorContent>
+            </mx:Accordion>
+            <s:VGroup width="100%" height="100%">
+                <s:Label text="Версия библиотеки: {HeyMoose.instance.version}"/>
+                <s:List width="100%" height="100%" id="logView" change="logView_changeHandler(event)"/>
+                <s:TextArea id="request" height="100%" width="100%"/>
+                <s:TextArea id="result" height="100%" width="100%"/>
+            </s:VGroup>
+        </s:HGroup>
     </s:Scroller>
 
 

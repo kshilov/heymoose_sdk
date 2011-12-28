@@ -50,11 +50,13 @@ public class AsyncToken extends EventDispatcher
 	{
 		setResult ( loader.data );
 		applyResult ( loader.data );
+		applyLog ( this, event );
 	}
 
 	private function loader_ioErrorHandler ( event:IOErrorEvent ):void
 	{
 		applyFault ( event );
+		applyLog ( this, event );
 	}
 
 	private function loader_httpStatusHandler ( event:HTTPStatusEvent ):void
@@ -65,6 +67,7 @@ public class AsyncToken extends EventDispatcher
 	private function loader_securityErrorHandler ( event:SecurityErrorEvent ):void
 	{
 		applyFault ( event );
+		applyLog ( this, event );
 	}
 
 
@@ -106,6 +109,21 @@ public class AsyncToken extends EventDispatcher
 	public function hasResponder ():Boolean
 	{
 		return (_responders != null && _responders.length > 0);
+	}
+
+	function applyLog ( token:AsyncToken, event:Event ):void
+	{
+		if ( _responders != null )
+		{
+			for ( var i:uint = 0; i < _responders.length; i++ )
+			{
+				var responder:IResponder = _responders[i];
+				if ( responder != null )
+				{
+					responder.log( token, event );
+				}
+			}
+		}
 	}
 
 	function applyFault ( event:Object ):void

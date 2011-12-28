@@ -22,6 +22,8 @@ import com.heymoose.core.net.IResponder;
 import com.heymoose.utils.chain.classes.BaseChainStep;
 import com.heymoose.utils.chain.classes.IAutonomousChainStep;
 
+import flash.events.Event;
+
 public class AsyncCommandChainStep extends BaseChainStep implements IResponder, IAutonomousChainStep
 {
 	// ========================================
@@ -135,6 +137,10 @@ public class AsyncCommandChainStep extends BaseChainStep implements IResponder, 
 		}
 
 		error ();
+	}
+	public function log ( token:AsyncToken, event:Event ):void
+	{
+
 	}
 }
 }

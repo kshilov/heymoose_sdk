@@ -11,29 +11,41 @@
 
 package com.heymoose.core.net
 {
+import flash.events.Event;
 
 public class Responder implements IResponder
 {
-	public function Responder ( result:Function, fault:Function )
+	public function Responder ( result:Function, fault:Function, log:Function = null )
 	{
 		super ();
 		_resultHandler = result;
 		_faultHandler = fault;
+		_logHandler = log;
 	}
 
 	public function result ( data:Object ):void
 	{
-		_resultHandler ( data );
+		if(_resultHandler)
+			_resultHandler ( data );
 	}
 
 	public function fault ( info:Object ):void
 	{
-		_faultHandler ( info );
+		if(_faultHandler)
+			_faultHandler ( info );
+	}
+
+	public function log ( token:AsyncToken, event:Event ):void
+	{
+		if(_logHandler)
+			_logHandler ( token, event );
 	}
 
 	private var _resultHandler:Function;
 
 	private var _faultHandler:Function;
+
+	private var _logHandler:Function;
 }
 
 
