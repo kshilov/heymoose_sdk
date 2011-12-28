@@ -97,7 +97,6 @@ public final class ImageBanner extends Banner
 		if ( image )
 			removeChild ( image );
 		image = addChild ( loader.content );
-		loader.contentLoaderInfo.applicationDomain
 
 		switch(loader.contentLoaderInfo.contentType)
 		{
@@ -122,6 +121,7 @@ public final class ImageBanner extends Banner
 		}
 		image.x = Math.floor ( ((bannerWidth - 1) - loader.contentLoaderInfo.width) / 2 ) + 1;
 		image.y = Math.floor ( ((bannerHeight - 1) - loader.contentLoaderInfo.height) / 2 ) + 1;
+
 
 	}
 

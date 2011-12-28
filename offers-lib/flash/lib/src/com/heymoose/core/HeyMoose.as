@@ -23,10 +23,12 @@ public class HeyMoose
 
 	private var platform:String;
 	private var rewardCallback:Function;
+	
+	private var showedOffers:Array;
 
 	public function HeyMoose ()
 	{
-
+		showedOffers = new Array();
 	}
 
 
@@ -87,6 +89,18 @@ public class HeyMoose
 		params['method'] = 'doOffer';
 		params['offer_id'] = offerId;
 		return getString ( params );
+	}
+	public function reportShow ( offer:Object ):AsyncToken
+	{
+		if(showedOffers.indexOf(offer.id)  > -1 )
+			return null;
+
+		showedOffers.push(offer.id);
+
+		var params:Object = new Object ();
+		params['method'] = 'reportShow';
+		params['offer_id'] = offer.id.toString();
+		return send ( params );
 	}
 
 

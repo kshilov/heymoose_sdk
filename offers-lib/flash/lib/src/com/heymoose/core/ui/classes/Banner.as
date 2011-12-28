@@ -54,6 +54,7 @@ public class Banner extends OffersBase
 
 	protected function playOffer ():void
 	{
+		services.reportShow(offers[currentOfferIndex]);
 		dispatchEvent ( new BannerEvent ( BannerEvent.SHOW, offers[currentOfferIndex], true ) );
 	}
 }

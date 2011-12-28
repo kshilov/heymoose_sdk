@@ -13,11 +13,11 @@ import flash.display.MovieClip;
 public class OffersBase extends MovieClip
 {
 	protected var offers:Array;
-	protected var services:HeyMoose;
+	private var _services:HeyMoose;
 
 	public function OffersBase ( services:HeyMoose )
 	{
-		this.services = services;
+		this._services = services;
 	}
 
 	protected function getOffersResult ( result:String ):void
@@ -28,7 +28,18 @@ public class OffersBase extends MovieClip
 
 	protected function fault ( fault:Object ):void
 	{
+		trace("REQUEST FAULT")
+	}
 
+	public function get services ():HeyMoose
+	{
+		if(_services == null) throw new Error("Please initialize offer with services or set services in constructor");
+		return _services;
+	}
+
+	public function set services ( value:HeyMoose ):void
+	{
+		_services = value;
 	}
 }
 }
