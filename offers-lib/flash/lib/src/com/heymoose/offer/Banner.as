@@ -38,6 +38,8 @@ internal class Banner extends OffersBase
 		graphics.endFill ();
 
 		addEventListener ( MouseEvent.CLICK, onMouseClick );
+
+		useHandCursor = true;
 	}
 
 	private function onMouseClick ( event:MouseEvent ):void
