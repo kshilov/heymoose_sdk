@@ -30,42 +30,25 @@ public class AsyncCommandChainStep extends BaseChainStep implements IResponder, 
 	// protected properties
 	// ========================================
 
-	/**
-	 *
-	 */
 	protected var asyncMethod:Function;
-
-	/**
-	 *
-	 */
 	protected var asyncMethodArgs:Array;
-
-	/**
-	 *
-	 */
 	protected var resultHandler:Function;
-
-	/**
-	 *
-	 */
 	protected var faultHandler:Function;
-
-	/**
-	 *
-	 */
 	protected var handlerArgs:Array;
+	protected var target:Object;
 
 	// ========================================
 	// constructor
 	// ========================================
 
-	public function AsyncCommandChainStep ( asyncMethod:Function, asyncMethodArgs:Array = null, resultHandler:Function = null, faultHandler:Function = null, handlerArgs:Array = null )
+	public function AsyncCommandChainStep ( asyncMethod:Function, asyncMethodArgs:Array = null, resultHandler:Function = null, faultHandler:Function = null, handlerArgs:Array = null, target:Object = null )
 	{
 		this.asyncMethodArgs = asyncMethodArgs;
 		this.asyncMethod = asyncMethod;
 		this.resultHandler = resultHandler;
 		this.faultHandler = faultHandler;
 		this.handlerArgs = handlerArgs;
+		this.target = target;
 	}
 
 
@@ -78,6 +61,7 @@ public class AsyncCommandChainStep extends BaseChainStep implements IResponder, 
 		else
 			token = asyncMethod ();
 
+		token.target = target;
 		token.addResponder ( this );
 	}
 
@@ -132,12 +116,10 @@ public class AsyncCommandChainStep extends BaseChainStep implements IResponder, 
 				}
 			}
 		}
-		{
-			trace ( info )
-		}
 
 		error ();
 	}
+
 	public function log ( token:AsyncToken, event:Event ):void
 	{
 

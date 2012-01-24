@@ -15,7 +15,7 @@ import flash.events.Event;
 
 public class Responder implements IResponder
 {
-	public function Responder ( result:Function, fault:Function, log:Function = null )
+	public function Responder ( result:Function, fault:Function = null, log:Function = null )
 	{
 		super ();
 		_resultHandler = result;
@@ -25,19 +25,19 @@ public class Responder implements IResponder
 
 	public function result ( data:Object ):void
 	{
-		if(_resultHandler)
+		if ( _resultHandler != null )
 			_resultHandler ( data );
 	}
 
 	public function fault ( info:Object ):void
 	{
-		if(_faultHandler)
+		if ( _faultHandler != null )
 			_faultHandler ( info );
 	}
 
 	public function log ( token:AsyncToken, event:Event ):void
 	{
-		if(_logHandler)
+		if ( _logHandler != null )
 			_logHandler ( token, event );
 	}
 

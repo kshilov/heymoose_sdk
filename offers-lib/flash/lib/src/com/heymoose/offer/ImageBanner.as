@@ -12,7 +12,7 @@ import by.blooddy.crypto.Base64;
 import com.heymoose.core.HeyMoose;
 import com.heymoose.core.net.AsyncToken;
 import com.heymoose.core.net.Responder;
-import com.heymoose.core.ui.classes.Banner;
+import com.heymoose.offer.event.BannerEvent;
 import com.heymoose.utils.chain.Chain;
 
 import flash.display.Bitmap;
@@ -21,7 +21,6 @@ import flash.display.Loader;
 import flash.events.Event;
 import flash.events.IOErrorEvent;
 import flash.events.TimerEvent;
-import flash.system.Security;
 import flash.utils.Timer;
 
 public final class ImageBanner extends Banner
@@ -58,16 +57,15 @@ public final class ImageBanner extends Banner
 		time = timer;
 
 		var token:AsyncToken = services.getOffers ( "1:" + count + ":" + bannerSizeId );
-		token.addResponder ( new Responder ( getOffersResult, fault ) );
+		token.addResponder ( new Responder ( getOffersResult ) );
+		token.target = this;
 		return token;
 	}
 
 
-	override protected function getOffersResult ( result:String ):void
+	override protected function getOffersResult ( result:Object ):void
 	{
-		super.getOffersResult ( result );
-
-		if ( !offers || offers.length == 0 ) return;
+		if ( !super.setOffersResult ( result ) ) return;
 
 		if ( rotateTimer && rotateTimer.hasEventListener ( TimerEvent.TIMER ) )
 			rotateTimer.removeEventListener ( TimerEvent.TIMER, rotateOffer );
@@ -98,36 +96,28 @@ public final class ImageBanner extends Banner
 			removeChild ( image );
 		image = addChild ( loader.content );
 
-		switch(loader.contentLoaderInfo.contentType)
+		switch ( loader.contentLoaderInfo.contentType )
 		{
 			case 'application/x-shockwave-flash':
-			break;
+				break;
 			case 'image/jpeg':
 				Bitmap ( image ).smoothing = true;
-			break;
+				break;
 			case 'image/gif':
 				Bitmap ( image ).smoothing = true;
-			break;
+				break;
 		}
-		var verticalAspect:Number = (bannerHeight - 1) / loader.contentLoaderInfo.height;
-		var horizontalAspect:Number = (bannerWidth - 1) / loader.contentLoaderInfo.width;
-		if ( verticalAspect > horizontalAspect )
-		{
-			image.scaleX = image.scaleY = horizontalAspect;
-		}
-		else
-		{
-			image.scaleX = image.scaleY = verticalAspect;
-		}
-		image.x = Math.floor ( ((bannerWidth - 1) - loader.contentLoaderInfo.width) / 2 ) + 1;
-		image.y = Math.floor ( ((bannerHeight - 1) - loader.contentLoaderInfo.height) / 2 ) + 1;
-
-
+		var verticalAspect:Number = bannerHeight / loader.contentLoaderInfo.height;
+		var horizontalAspect:Number = bannerWidth / loader.contentLoaderInfo.width;
+		image.scaleX = image.scaleY = Math.min ( verticalAspect, horizontalAspect );
+		image.x = (bannerWidth - loader.contentLoaderInfo.width) / 2;
+		image.y = (bannerHeight - loader.contentLoaderInfo.height) / 2;
 	}
 
 	private function loader_ioErrorHandler ( event:IOErrorEvent ):void
 	{
-		trace ( offers[currentOfferIndex].id, event )
+		var getOffersFaultEvent:BannerEvent = new BannerEvent ( BannerEvent.IMAGE_DECODE_ERROR, offers[currentOfferIndex] );
+		dispatchEvent ( getOffersFaultEvent );
 	}
 }
 }

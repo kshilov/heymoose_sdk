@@ -11,9 +11,10 @@ import flash.events.Event;
 public class LogEvent extends Event
 {
 	public static const UPDATE_LOG:String = "com.heymoose.utils.log.UPDATE_LOG";
+
 	public function LogEvent ()
 	{
-		super(UPDATE_LOG, true);
+		super ( UPDATE_LOG, true );
 	}
 }
 }

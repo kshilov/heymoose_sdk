@@ -10,7 +10,6 @@ package com.heymoose.offer
 import com.heymoose.core.HeyMoose;
 import com.heymoose.core.net.AsyncToken;
 import com.heymoose.core.net.Responder;
-import com.heymoose.core.ui.classes.Banner;
 import com.heymoose.utils.chain.Chain;
 
 import flash.events.NetStatusEvent;
@@ -63,16 +62,15 @@ public final class VideoBanner extends Banner
 	public function initWithoutServices ( count:int = 1 ):AsyncToken
 	{
 		var token:AsyncToken = services.getOffers ( "2:" + count );
-		token.addResponder ( new Responder ( getOffersResult, fault ) );
+		token.addResponder ( new Responder ( getOffersResult ) );
+		token.target = this;
 		return token;
 	}
 
 
-	override protected function getOffersResult ( result:String ):void
+	override protected function getOffersResult ( result:Object ):void
 	{
-		super.getOffersResult ( result );
-
-		if ( !offers || offers.length == 0 ) return;
+		if ( !super.setOffersResult ( result ) ) return;
 
 		playOffer ()
 	}

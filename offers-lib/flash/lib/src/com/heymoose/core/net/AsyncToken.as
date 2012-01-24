@@ -6,6 +6,8 @@
  */
 package com.heymoose.core.net
 {
+import by.blooddy.crypto.serialization.JSON;
+
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.events.HTTPStatusEvent;
@@ -18,7 +20,9 @@ import flash.net.URLVariables;
 
 public class AsyncToken extends EventDispatcher
 {
-
+	public var params:Object;
+	public var url:String;
+	public var target:Object;
 	private var loader:URLLoader = new URLLoader ();
 
 	public function AsyncToken ()
@@ -28,6 +32,9 @@ public class AsyncToken extends EventDispatcher
 
 	public function send ( url:String, params:Object ):AsyncToken
 	{
+		this.url = url;
+		this.params = params;
+
 		var request:URLRequest = new URLRequest ( url );
 		request.method = URLRequestMethod.GET;
 		var variables:URLVariables = new URLVariables ();
@@ -48,8 +55,9 @@ public class AsyncToken extends EventDispatcher
 
 	private function loader_completeHandler ( event:Event ):void
 	{
-		setResult ( loader.data );
-		applyResult ( loader.data );
+		var result:Object = JSON.decode ( loader.data as String );
+		setResult ( result );
+		applyResult ( result );
 		applyLog ( this, event );
 	}
 
@@ -70,6 +78,9 @@ public class AsyncToken extends EventDispatcher
 		applyLog ( this, event );
 	}
 
+	//----------------------------------
+	// responders
+	//----------------------------------
 
 	private var _responders:Array;
 
@@ -111,7 +122,7 @@ public class AsyncToken extends EventDispatcher
 		return (_responders != null && _responders.length > 0);
 	}
 
-	function applyLog ( token:AsyncToken, event:Event ):void
+	private function applyLog ( token:AsyncToken, event:Event ):void
 	{
 		if ( _responders != null )
 		{
@@ -120,13 +131,13 @@ public class AsyncToken extends EventDispatcher
 				var responder:IResponder = _responders[i];
 				if ( responder != null )
 				{
-					responder.log( token, event );
+					responder.log ( token, event );
 				}
 			}
 		}
 	}
 
-	function applyFault ( event:Object ):void
+	private function applyFault ( event:Object ):void
 	{
 		if ( _responders != null )
 		{
@@ -141,7 +152,7 @@ public class AsyncToken extends EventDispatcher
 		}
 	}
 
-	function applyResult ( event:Object ):void
+	private function applyResult ( event:Object ):void
 	{
 		if ( _responders != null )
 		{
@@ -156,10 +167,7 @@ public class AsyncToken extends EventDispatcher
 		}
 	}
 
-	/**
-	 * @private
-	 */
-	function setResult ( newResult:Object ):void
+	private function setResult ( newResult:Object ):void
 	{
 		_result = newResult;
 	}

@@ -4,7 +4,7 @@
  * Date: 12/13/11
  * Time: 9:17 AM
  */
-package com.heymoose.core.ui.classes
+package com.heymoose.offer
 {
 import by.blooddy.crypto.Base64;
 
@@ -12,11 +12,8 @@ import com.heymoose.core.HeyMoose;
 import com.heymoose.offer.event.BannerEvent;
 
 import flash.display.Bitmap;
-
 import flash.display.DisplayObject;
-
 import flash.display.Loader;
-
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.IOErrorEvent;
@@ -24,7 +21,7 @@ import flash.events.MouseEvent;
 import flash.net.URLRequest;
 import flash.net.navigateToURL;
 
-public class OfferItem extends Sprite
+internal class OfferItem extends Sprite
 {
 	[Embed(source="asset/skin.swf", symbol="offer")]
 	public var skinClass:Class;
@@ -55,8 +52,9 @@ public class OfferItem extends Sprite
 		buttonMode = true;
 		useHandCursor = true;
 
-		addEventListener(MouseEvent.CLICK, onMouseClick )
+		addEventListener ( MouseEvent.CLICK, onMouseClick )
 	}
+
 	private function offerBannerLoaded ( event:Event ):void
 	{
 		if ( image )
@@ -68,17 +66,18 @@ public class OfferItem extends Sprite
 		image.x = skin['imageMask'].x;
 		image.y = skin['imageMask'].y;
 		image.mask = skin['imageMask'];
-		skin.swapChildren(image, skin['imageMask'])
+		skin.swapChildren ( image, skin['imageMask'] )
 	}
 
 	private function loader_ioErrorHandler ( event:IOErrorEvent ):void
 	{
-		trace ( data.id, event )
+		var getOffersFaultEvent:BannerEvent = new BannerEvent ( BannerEvent.IMAGE_DECODE_ERROR );
+		dispatchEvent ( getOffersFaultEvent );
 	}
 
 	private function onMouseClick ( event:MouseEvent ):void
 	{
-		dispatchEvent ( new BannerEvent ( BannerEvent.CLICK, data, true ) );
+		dispatchEvent ( new BannerEvent ( BannerEvent.CLICK, data ) );
 		navigateToURL ( new URLRequest ( services.doOffer ( data.id ) ) );
 	}
 }

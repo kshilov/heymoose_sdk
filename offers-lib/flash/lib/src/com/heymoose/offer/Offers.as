@@ -7,7 +7,6 @@
 package com.heymoose.offer
 {
 import com.heymoose.core.HeyMoose;
-import com.heymoose.core.ui.classes.OffersWindow;
 
 public final class Offers extends OffersWindow
 {

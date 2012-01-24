@@ -9,6 +9,7 @@ package com.heymoose.core
 
 import by.blooddy.crypto.MD5;
 
+import com.heymoose.core.event.ServiceEvent;
 import com.heymoose.core.net.AsyncToken;
 import com.heymoose.core.net.Responder;
 import com.heymoose.utils.log.Log;
@@ -21,9 +22,9 @@ import flash.events.IOErrorEvent;
 import flash.utils.Dictionary;
 import flash.utils.getTimer;
 
-public class HeyMoose extends EventDispatcher
+public final class HeyMoose extends EventDispatcher
 {
-	public static var _instance:HeyMoose;
+	private static var _instance:HeyMoose;
 
 	private var appId:int;
 	private var secret:String;
@@ -32,24 +33,25 @@ public class HeyMoose extends EventDispatcher
 
 	private var platform:String;
 	private var rewardCallback:Function;
-	
+
 	private var showedOffers:Array;
-	
+
 	public var log:Log;
-	private var tokenToLogItem:Dictionary = new Dictionary();
+	private var tokenToLogItem:Dictionary = new Dictionary ();
 
-	public var version:String = "0.10";
+	public var version:String = "1.1";
 
-	public function HeyMoose ()
+	public function HeyMoose ( s:SingletonEnforcer )
 	{
-		showedOffers = new Array();
+		if ( s == null ) throw new Error ( "Singleton, please use HeyMoose.instance" );
 	}
 
 
 	public static function get instance ():HeyMoose
 	{
 		if ( !HeyMoose._instance )
-			HeyMoose._instance = new HeyMoose ();
+			HeyMoose._instance = new HeyMoose ( new SingletonEnforcer () );
+		_instance.showedOffers = new Array ();
 		return HeyMoose._instance
 	}
 
@@ -115,10 +117,10 @@ public class HeyMoose extends EventDispatcher
 
 	public function reportShow ( offerId:String ):AsyncToken
 	{
-		if(showedOffers.indexOf(offerId)  > -1 )
+		if ( showedOffers.indexOf ( offerId ) > -1 )
 			return null;
 
-		showedOffers.push(offerId);
+		showedOffers.push ( offerId );
 
 		var params:Object = new Object ();
 		params['method'] = 'reportShow';
@@ -136,7 +138,7 @@ public class HeyMoose extends EventDispatcher
 
 		for ( var key:String in params )
 		{
-			if(params[key] == null || params[key] == 'NULL')
+			if ( params[key] == null || params[key] == 'NULL' )
 			{
 				delete params[key];
 			}
@@ -150,35 +152,57 @@ public class HeyMoose extends EventDispatcher
 		params['sig'] = generateSig ( params );
 
 		// LOG
-		if(log)
+		if ( log )
 		{
-			token.addResponder(new Responder(null, null, logToken));
-			var logItem:LogItem = new LogItem(token);
-			logItem.startTime = getTimer();
-			logItem.request = generateString(params);
-			logItem.method = params['method']
-			log.sourceArray.unshift(logItem);
+			token.addResponder ( new Responder ( null, null, logToken ) );
+			var logItem:LogItem = new LogItem ( token );
+			logItem.startTime = getTimer ();
+			logItem.request = generateString ( params );
+			logItem.method = params['method'];
+			log.sourceArray.unshift ( logItem );
 			tokenToLogItem[token] = logItem;
-			log.dispatchEvent(new LogEvent());
+			log.dispatchEvent ( new LogEvent () );
 		}
+
+		token.addResponder ( new Responder ( null, null, requestHandler ) );
+
+		dispatchEvent ( new ServiceEvent ( ServiceEvent.REQUEST_SENT, params['method'], generateString ( params ) ) );
 
 		return token.send ( "http://heymoose.com/rest_api/api", params );
 	}
+
+	private function requestHandler ( token:AsyncToken, event:Event ):void
+	{
+		if ( event.type == Event.COMPLETE )
+		{
+			var completeEvent:Event = new ServiceEvent ( ServiceEvent.REQUEST_COMPLETED, token.params['method'], generateString ( token.params ) );
+			dispatchEvent ( completeEvent );
+			token.target.dispatchEvent ( completeEvent );
+		}
+		else
+		{
+			var faultEvent:Event = new ServiceEvent ( ServiceEvent.REQUEST_FAULT, token.params['method'], generateString ( token.params ) );
+			dispatchEvent ( faultEvent );
+			token.target.dispatchEvent ( faultEvent );
+		}
+		token.target = null;
+	}
+
 	private function logToken ( token:AsyncToken, event:Event ):void
 	{
-		var logItem:LogItem = LogItem(tokenToLogItem[token]);
-		switch(event.type)
+		var logItem:LogItem = LogItem ( tokenToLogItem[token] );
+		switch ( event.type )
 		{
 			case Event.COMPLETE:
 				logItem.result = event.target.data;
-			break;
+				break;
 			case IOErrorEvent.IO_ERROR:
-				logItem.result = IOErrorEvent(event).text;
+				logItem.result = IOErrorEvent ( event ).text;
 				logItem.fault = true;
-			break;
+				break;
 		}
-		logItem.endTime = getTimer();
-		log.dispatchEvent(new LogEvent());
+		logItem.endTime = getTimer ();
+		log.dispatchEvent ( new LogEvent () );
 		delete tokenToLogItem[token];
 	}
 
@@ -187,7 +211,7 @@ public class HeyMoose extends EventDispatcher
 	{
 		for ( var key:String in params )
 		{
-			if(params[key] == null || params[key] == 'NULL')
+			if ( params[key] == null || params[key] == 'NULL' )
 			{
 				delete params[key];
 			}
@@ -200,7 +224,7 @@ public class HeyMoose extends EventDispatcher
 		params['nocache'] = Math.random ();
 		params['sig'] = generateSig ( params );
 
-		return generateString( params )
+		return generateString ( params )
 	}
 
 	private function generateString ( params:Object ):String
@@ -251,6 +275,9 @@ public class HeyMoose extends EventDispatcher
 		return output;
 	}
 
-	
+
 }
+}
+class SingletonEnforcer
+{
 }

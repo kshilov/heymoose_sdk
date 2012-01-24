@@ -4,10 +4,9 @@
  * Date: 12/13/11
  * Time: 9:17 AM
  */
-package com.heymoose.core.ui.classes
+package com.heymoose.offer
 {
 import com.heymoose.core.HeyMoose;
-import com.heymoose.core.OffersBase;
 import com.heymoose.core.net.AsyncToken;
 import com.heymoose.core.net.Responder;
 import com.heymoose.core.ui.SimpleButton;
@@ -20,7 +19,7 @@ import flash.geom.Rectangle;
 import flash.net.URLRequest;
 import flash.net.navigateToURL;
 
-public class OffersWindow extends OffersBase
+internal class OffersWindow extends OffersBase
 {
 	[Embed(source="asset/skin.swf", symbol="offerWindow")]
 	public var skinClass:Class;
@@ -52,15 +51,14 @@ public class OffersWindow extends OffersBase
 	public function initWithoutServices ( count:int = 1 ):AsyncToken
 	{
 		var token:AsyncToken = services.getOffers ( "0:" + count );
-		token.addResponder ( new Responder ( getOffersResult, fault ) );
+		token.addResponder ( new Responder ( getOffersResult ) );
+		token.target = this;
 		return token;
 	}
 
-	override protected function getOffersResult ( result:String ):void
+	override protected function getOffersResult ( result:Object ):void
 	{
-		super.getOffersResult ( result );
-
-		if ( !offers || offers.length == 0 ) return;
+		if ( !super.setOffersResult ( result ) ) return;
 
 		var counter:int = 0;
 		for each( var offer:Object in offers )

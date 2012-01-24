@@ -24,12 +24,13 @@ public class HeyMooseSex
 		}
 		return "NULL"
 	}
-	public static function get list():Array
+
+	public static function get list ():Array
 	{
-		var result:Array = new Array();
-		result.push({label:'-', value:null});
-		result.push({label:'Мужской', value:male});
-		result.push({label:'Женский', value:female});
+		var result:Array = new Array ();
+		result.push ( {label:'-', value:null} );
+		result.push ( {label:'Мужской', value:male} );
+		result.push ( {label:'Женский', value:female} );
 		return result;
 	}
 }

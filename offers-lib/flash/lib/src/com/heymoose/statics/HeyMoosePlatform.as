@@ -13,13 +13,14 @@ public class HeyMoosePlatform
 	public static var odnoklassniki:String = "ODNOKLASSNIKI";
 	public static var moimir:String = "MOIMIR";
 	public static var facebook:String = "FACEBOOK";
-	public static function get list():Array
+
+	public static function get list ():Array
 	{
-		var result:Array = new Array();
-		result.push({label:'В Контакте', value:vkontakte});
-		result.push({label:'Одноклассники', value:odnoklassniki});
-		result.push({label:'Мой мир', value:moimir});
-		result.push({label:'Facebook', value:facebook});
+		var result:Array = new Array ();
+		result.push ( {label:'В Контакте', value:vkontakte} );
+		result.push ( {label:'Одноклассники', value:odnoklassniki} );
+		result.push ( {label:'Мой мир', value:moimir} );
+		result.push ( {label:'Facebook', value:facebook} );
 		return result;
 	}
 }

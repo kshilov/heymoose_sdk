@@ -66,7 +66,7 @@ public class Chain extends BaseCompositeChain
 	 */
 	public function addAsyncCommand ( asyncMethod:Function, asyncMethodArgs:Array = null, resultHandler:Function = null, faultHandler:Function = null, handlerArgs:Array = null ):Chain
 	{
-		addStep ( new AsyncCommandChainStep ( asyncMethod, asyncMethodArgs, resultHandler, faultHandler, handlerArgs ) );
+		addStep ( new AsyncCommandChainStep ( asyncMethod, asyncMethodArgs, resultHandler, faultHandler, handlerArgs, dispatcher ) );
 		return this;
 	}
 

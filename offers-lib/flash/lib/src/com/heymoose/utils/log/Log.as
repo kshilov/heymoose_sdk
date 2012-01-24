@@ -7,14 +7,14 @@
 package com.heymoose.utils.log
 {
 import flash.events.EventDispatcher;
-import flash.events.IEventDispatcher;
 
 public class Log extends EventDispatcher
 {
 	public var sourceArray:Array;
+
 	public function Log ()
 	{
-		sourceArray = new Array();
+		sourceArray = new Array ();
 	}
 }
 }

@@ -97,7 +97,6 @@ package vk.api
 			loader.addEventListener( Event.COMPLETE, function( e:Event ):void
 			{
 				var loader:URLLoader = URLLoader( e.target );
-				trace( loader.data );
 				var data:Object = JSON.decode( loader.data );
 				if ( data.error )
 				{

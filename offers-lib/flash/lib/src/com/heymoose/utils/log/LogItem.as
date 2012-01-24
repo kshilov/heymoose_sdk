@@ -16,7 +16,8 @@ public class LogItem
 	public var method:String;
 	public var result:String;
 	public var fault:Boolean;
-	public function LogItem (token:AsyncToken)
+
+	public function LogItem ( token:AsyncToken )
 	{
 	}
 
@@ -29,15 +30,16 @@ public class LogItem
 	{
 		_startTime = value;
 	}
-	public function toString():String
+
+	public function toString ():String
 	{
-		if(fault)
+		if ( fault )
 		{
-			return "FAULT "+method + " ("+time.toString()+")";
+			return "FAULT " + method + " (" + time.toString () + ")";
 		}
 		else
 		{
-			return method + " ("+time.toString()+")";
+			return method + " (" + time.toString () + ")";
 		}
 
 	}
