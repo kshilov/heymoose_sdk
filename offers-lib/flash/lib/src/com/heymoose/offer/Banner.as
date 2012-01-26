@@ -40,10 +40,12 @@ internal class Banner extends OffersBase
 		addEventListener ( MouseEvent.CLICK, onMouseClick );
 
 		useHandCursor = true;
+		buttonMode = true;
 	}
 
 	private function onMouseClick ( event:MouseEvent ):void
 	{
+		if(!offers || offers[currentOfferIndex] == null) return;
 		dispatchEvent ( new BannerEvent ( BannerEvent.CLICK, offers[currentOfferIndex] ) );
 		navigateToURL ( new URLRequest ( services.doOffer ( offers[currentOfferIndex].id ) ) );
 	}
