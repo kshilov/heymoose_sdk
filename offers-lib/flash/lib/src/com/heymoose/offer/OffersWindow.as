@@ -21,20 +21,20 @@ import flash.net.navigateToURL;
 
 internal class OffersWindow extends OffersBase
 {
-	[Embed(source="asset/skin.swf", symbol="offerWindow")]
+	//[Embed(source="asset/skin.swf", symbol="offerWindow")]
 	public var skinClass:Class;
 	public var skin:Sprite;
 	private var container:Sprite;
 
 	public function OffersWindow ()
 	{
-		super ();
+		/*super ();
 		skin = new skinClass ();
 		addChild ( skin );
 		initButtons ();
 		createContainer ();
 		createScroller ();
-		addEventListener ( Event.ADDED_TO_STAGE, addedToStageHandler )
+		addEventListener ( Event.ADDED_TO_STAGE, addedToStageHandler )*/
 	}
 
 	public function initWithServices ( count:int = 1 ):void

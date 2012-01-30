@@ -23,7 +23,7 @@ import flash.net.navigateToURL;
 
 internal class OfferItem extends Sprite
 {
-	[Embed(source="asset/skin.swf", symbol="offer")]
+	//[Embed(source="asset/skin.swf", symbol="offer")]
 	public var skinClass:Class;
 	public var skin:Sprite;
 
@@ -35,7 +35,7 @@ internal class OfferItem extends Sprite
 
 	public function OfferItem ( services:HeyMoose, data:Object )
 	{
-		this.services = services;
+		/*this.services = services;
 		this.data = data;
 
 		skin = new skinClass ();
@@ -52,7 +52,7 @@ internal class OfferItem extends Sprite
 		buttonMode = true;
 		useHandCursor = true;
 
-		addEventListener ( MouseEvent.CLICK, onMouseClick )
+		addEventListener ( MouseEvent.CLICK, onMouseClick )*/
 	}
 
 	private function offerBannerLoaded ( event:Event ):void
