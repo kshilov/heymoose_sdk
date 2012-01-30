@@ -6,13 +6,11 @@
  */
 package com.heymoose.offer
 {
-import com.heymoose.core.HeyMoose;
-
 public final class Offers extends OffersWindow
 {
-	public function Offers ( services:HeyMoose = null )
+	public function Offers ()
 	{
-		super ( services );
+		super ();
 	}
 }
 }

@@ -7,6 +7,7 @@
 package com.heymoose.offer
 {
 import com.heymoose.core.*;
+import com.heymoose.core.event.ServiceEvent;
 import com.heymoose.offer.event.BannerEvent;
 
 import flash.display.MovieClip;
@@ -14,11 +15,12 @@ import flash.display.MovieClip;
 internal class OffersBase extends MovieClip
 {
 	protected var offers:Array;
-	private var _services:HeyMoose;
+	protected var services:HeyMoose;
 
-	public function OffersBase ( services:HeyMoose )
+	public function OffersBase ()
 	{
-		this._services = services;
+		services = HeyMoose.instance;
+		addEventListener ( ServiceEvent.REQUEST_FAULT, onRequestFailed );
 	}
 
 	protected function getOffersResult ( result:Object ):void
@@ -34,20 +36,37 @@ internal class OffersBase extends MovieClip
 		{
 			var offersListEmptyEvent:BannerEvent = new BannerEvent ( BannerEvent.OFFERS_LIST_EMPTY );
 			dispatchEvent ( offersListEmptyEvent );
+			dispatchBannerError ();
 			return false;
 		}
 		return true;
 	}
 
-	public function get services ():HeyMoose
+	protected function onRequestFailed ( event:ServiceEvent ):void
 	{
-		if ( _services == null ) throw new Error ( "Please initialize offer with services or set services in constructor" );
-		return _services;
+		if ( event.method != 'reportShow' )
+		{
+			dispatchBannerError ();
+		}
 	}
 
-	public function set services ( value:HeyMoose ):void
+	protected function dispatchBannerError ( offer:Object = null ):void
 	{
-		_services = value;
+		if(hideOnError) visible = false;
+		var bannerError:BannerEvent = new BannerEvent ( BannerEvent.BANNER_ERROR );
+		bannerError.offer = offer;
+		dispatchEvent ( bannerError );
+	}
+
+	private var _hideOnError:Boolean;
+	public function get hideOnError ():Boolean
+	{
+		return _hideOnError;
+	}
+
+	public function set hideOnError ( value:Boolean ):void
+	{
+		_hideOnError = value;
 	}
 }
 }

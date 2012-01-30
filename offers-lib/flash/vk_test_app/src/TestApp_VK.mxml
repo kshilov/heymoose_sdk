@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark"
+               xmlns:mx="library://ns.adobe.com/flex/mx"
+               addedToStage="onAddedToStage(event)">
+    <fx:Script>
+		<![CDATA[
+        import com.heymoose.core.HeyMoose;
+        import com.heymoose.offer.ImageBanner;
+        import com.heymoose.statics.HeyMooseBirthDate;
+        import com.heymoose.statics.HeyMoosePlatform;
+        import com.heymoose.statics.HeyMooseSex;
+
+        import vk.APIConnection;
+
+        [Bindable]
+        private var sex:String;
+        [Bindable]
+        private var year:String;
+        [Bindable]
+        private var city:String;
+
+        private var VK:APIConnection;
+
+        private var api_id:String = 'xxx';
+        private var viewer_id:String = 'xxx';
+        private var sid:String = 'xxx';
+        private var secret:String = 'xxx';
+
+        private var hm_api_id:int = xxx;
+        private var hm_secret:String = "xxx";
+
+        private function onAddedToStage ( e:Event ):void
+        {
+            var flashVars:Object = stage.loaderInfo.parameters as Object;
+            if ( !flashVars.api_id )
+            {
+                flashVars['api_id'] = api_id;
+                flashVars['viewer_id'] = viewer_id;
+                flashVars['sid'] = sid;
+                flashVars['secret'] = secret;
+            }
+
+            VK = new APIConnection ( flashVars );
+            HeyMoose.instance.init ( hm_api_id, hm_secret, viewer_id, HeyMoosePlatform.vkontakte );
+
+            VK.api ( 'getProfiles', { uids:flashVars['viewer_id'], fields:'sex,bdate,city' }, fetchCityInfo, onApiRequestFail );
+        }
+
+
+        private function fetchCityInfo ( data:Object ):void
+        {
+            sex = HeyMooseSex.convert ( data[0]['sex'], HeyMoosePlatform.vkontakte );
+            year = HeyMooseBirthDate.convert ( data[0]['bdate'], HeyMoosePlatform.vkontakte );
+
+            VK.api ( 'places.getCityById', { cids:data[0]['city'] }, fetchUserInfo, onApiRequestFail );
+        }
+
+        private function fetchUserInfo ( data:Object ):void
+        {
+            city = data[0]['name'];
+
+            HeyMoose.instance.setPerformer ( sex, year, city );
+
+            var ibanner:ImageBanner = new ImageBanner ( '300x250', 0xFF0000, 1 );
+            ibanner.hideOnError = true;
+            ibanner.introduceAndInit( 5 );
+            element.addChild ( ibanner );
+        }
+
+
+        private function onApiRequestFail ( data:Object ):void
+        {
+            trace ( "Error: " + data.error_msg + "\n" );
+        }
+        ]]>
+	</fx:Script>
+    <s:Scroller width="100%" height="100%">
+        <s:VGroup paddingLeft="10" paddingRight="10" paddingTop="10" paddingBottom="10">
+            <s:Label text="Sex: {sex}"/>
+            <s:Label text="Year: {year}"/>
+            <s:Label text="City: {city}"/>
+            <mx:UIComponent id="element" height="60"/>
+        </s:VGroup>
+    </s:Scroller>
+
+
+</s:Application>

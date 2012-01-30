@@ -6,7 +6,6 @@
  */
 package com.heymoose.offer
 {
-import com.heymoose.core.HeyMoose;
 import com.heymoose.core.net.AsyncToken;
 import com.heymoose.offer.event.BannerEvent;
 
@@ -23,17 +22,16 @@ internal class Banner extends OffersBase
 
 	protected var currentOfferIndex:int = 0;
 
-	public function Banner ( size:String = "0x0", backgroundColor:uint = 0xFFFFFF, backgroundAlpha:Number = 0.8, services:HeyMoose = null )
+	public function Banner ( size:String = "0x0", placeholderColor:uint = 0xFFFFFF, placeholderAlpha:Number = 0 )
 	{
-		super ( services );
+		super ();
 		var sizeParts:Array = size.split ( "x" );
 		if ( sizeParts.length != 2 ) throw ( new Error ( 'Invalid banner size' ) );
 		bannerWidth = int ( sizeParts[0] );
 		bannerHeight = int ( sizeParts[1] );
 		bannerSizeId = size;
 
-		graphics.beginFill ( backgroundColor, backgroundAlpha );
-		graphics.lineStyle ( 1, 0, 0.5 );
+		graphics.beginFill ( placeholderColor, placeholderAlpha );
 		graphics.drawRect ( 0, 0, bannerWidth, bannerHeight );
 		graphics.endFill ();
 
@@ -45,7 +43,7 @@ internal class Banner extends OffersBase
 
 	private function onMouseClick ( event:MouseEvent ):void
 	{
-		if(!offers || offers[currentOfferIndex] == null) return;
+		if ( !offers || offers[currentOfferIndex] == null ) return;
 		dispatchEvent ( new BannerEvent ( BannerEvent.CLICK, offers[currentOfferIndex] ) );
 		navigateToURL ( new URLRequest ( services.doOffer ( offers[currentOfferIndex].id ) ) );
 	}

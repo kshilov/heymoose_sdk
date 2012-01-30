@@ -26,9 +26,9 @@ internal class OffersWindow extends OffersBase
 	public var skin:Sprite;
 	private var container:Sprite;
 
-	public function OffersWindow ( services:HeyMoose )
+	public function OffersWindow ()
 	{
-		super ( services );
+		super ();
 		skin = new skinClass ();
 		addChild ( skin );
 		initButtons ();

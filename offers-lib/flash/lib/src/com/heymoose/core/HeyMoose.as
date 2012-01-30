@@ -134,6 +134,11 @@ public final class HeyMoose extends EventDispatcher
 	//////////////////////////////////////////
 	private function send ( params:Object ):AsyncToken
 	{
+		if(platform == null)
+		{
+			trace("ERROR: Please init HeyMoose first (HeyMoose.instance.init)")
+			return null;
+		}
 		var token:AsyncToken = new AsyncToken ();
 
 		for ( var key:String in params )

@@ -61,6 +61,11 @@ public class AsyncCommandChainStep extends BaseChainStep implements IResponder, 
 		else
 			token = asyncMethod ();
 
+		if(token == null)
+		{
+			complete();
+			return;
+		}
 		token.target = target;
 		token.addResponder ( this );
 	}

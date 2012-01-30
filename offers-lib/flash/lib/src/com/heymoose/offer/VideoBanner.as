@@ -7,7 +7,6 @@
 package com.heymoose.offer
 {
 
-import com.heymoose.core.HeyMoose;
 import com.heymoose.core.net.AsyncToken;
 import com.heymoose.core.net.Responder;
 import com.heymoose.utils.chain.Chain;
@@ -24,9 +23,9 @@ public final class VideoBanner extends Banner
 	private var videoStream:NetStream;
 
 
-	public function VideoBanner ( size:String = "0 x 0", backgroundColor:uint = 0xFFFFFF, backgroundAlpha:Number = 0.8, services:HeyMoose = null )
+	public function VideoBanner ( size:String = "0 x 0", placeholderColor:uint = 0xFFFFFF, placeholderAlpha:Number = 0 )
 	{
-		super ( size, backgroundColor, backgroundAlpha, services );
+		super ( size, placeholderColor, placeholderAlpha );
 
 		video = new Video ();
 		video.visible = false;
@@ -47,21 +46,22 @@ public final class VideoBanner extends Banner
 		videoStream.client = customClient;
 	}
 
-
-	public function initWithServices ( count:int = 1 ):void
+	public function introduceAndInit ( count:int = 1 ):void
 	{
-		services = HeyMoose.instance;
-
 		var chain:Chain = new Chain ( this );
 		chain.addAsyncCommand ( services.introducePerformer );
-		chain.addAsyncCommand ( initWithoutServices, [count] );
+		chain.addAsyncCommand ( init, [count] );
 		chain.start ();
 	}
 
-
-	public function initWithoutServices ( count:int = 1 ):AsyncToken
+	public function init ( count:int = 1 ):AsyncToken
 	{
 		var token:AsyncToken = services.getOffers ( "2:" + count );
+		if(!token)
+		{
+			dispatchBannerError();
+			return null;
+		}
 		token.addResponder ( new Responder ( getOffersResult ) );
 		token.target = this;
 		return token;
@@ -127,6 +127,18 @@ public final class VideoBanner extends Banner
 		{
 			nextOffer ();
 		}
+	}
+
+	[Deprecated(replacement="introduceAndInit", since="1.2")]
+	public function initWithServices ( count:int = 1 ):void
+	{
+		introduceAndInit ( count );
+	}
+
+	[Deprecated(replacement="init", since="1.2")]
+	public function initWithoutServices ( count:int = 1 ):AsyncToken
+	{
+		return init ( count );
 	}
 }
 }

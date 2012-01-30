@@ -15,8 +15,7 @@ public class BannerEvent extends Event
 
 	// Dispatch when offers list empty
 	public static const OFFERS_LIST_EMPTY:String = "com.heymoose.offer.event.offersListEmpty";
-	// Dispatch on offers loading faulted
-	public static const GET_OFFERS_FAULT:String = "com.heymoose.offer.event.getOffersFault";
+
 
 	// Dispatch on decode image error
 	public static const IMAGE_DECODE_ERROR:String = "com.heymoose.offer.event.offerDisplayError";
@@ -25,6 +24,9 @@ public class BannerEvent extends Event
 	public static const CLICK:String = "com.heymoose.offer.event.click";
 	// Window closed
 	public static const CLOSE_WINDOW:String = "com.heymoose.offer.event.closeWindow";
+
+	// Объединенная ошибка когда баннер не может быть показан
+	public static const BANNER_ERROR:String = "com.heymoose.offer.event.bannerError";
 
 	public var offer:Object;
 
